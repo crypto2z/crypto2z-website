@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "pi5-node-migration",
+    "title": "Migrating my Bitcoin node from Pi 4 to Pi 5 with NVMe storage",
+    "date": "2025-05-01",
+    "category": "node-setup",
+    "tags": ["raspberry pi", "mynode", "nvme", "bitcoin"],
+    "excerpt": "The full journey: USB 2.0 bottlenecks, JMicron controller pain, rsync blockchain transfer, and getting MyNode to recognize the new drive."
+  },
+  {
+    "slug": "dca-bot-volatility",
+    "title": "Building a volatility-aware DCA bot on Coinbase Advanced Trade",
+    "date": "2025-04-10",
+    "category": "dca-bot",
+    "tags": ["python", "coinbase", "flask", "systemd"],
+    "excerpt": "How I analyzed 180 days of OHLCV data to derive per-coin dip thresholds, then wired it into a Python bot with a Flask dashboard and systemd services."
+  },
+  {
+    "slug": "presearch-pi4",
+    "title": "Running a Presearch node on a repurposed Raspberry Pi 4",
+    "date": "2025-03-15",
+    "category": "presearch",
+    "tags": ["presearch", "docker", "raspberry pi", "PRE"],
+    "excerpt": "After the Pi 5 migration, the old Pi 4 got a new job. Installing Docker, staking PRE via Base/Coinbase Wallet, and keeping it running 24/7."
+  }
+]
