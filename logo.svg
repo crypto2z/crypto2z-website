@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <rect width="320" height="80" fill="#080c10"/>
+  <!-- hex outline -->
+  <polygon points="40,4 72,20 72,56 40,72 8,56 8,20" fill="none" stroke="#00e676" stroke-width="1.5"/>
+  <!-- inner circuit ring -->
+  <polygon points="40,12 64,25 64,51 40,64 16,51 16,25" fill="none" stroke="#1e2d3d" stroke-width="0.75"/>
+  <!-- corner dots -->
+  <circle cx="40" cy="4"  r="2" fill="#00e676"/>
+  <circle cx="72" cy="20" r="2" fill="#00e676"/>
+  <circle cx="72" cy="56" r="2" fill="#00e676"/>
+  <circle cx="40" cy="72" r="2" fill="#00e676"/>
+  <circle cx="8"  cy="56" r="2" fill="#00e676"/>
+  <circle cx="8"  cy="20" r="2" fill="#00e676"/>
+  <!-- lightning bolt -->
+  <path d="M44,18 L33,40 L40,40 L33,60 L48,36 L41,36 Z" fill="#00e676"/>
+  <!-- wordmark: crypto (light) -->
+  <text x="90" y="48" font-family="'Space Mono', monospace" font-size="28" font-weight="400" fill="#8899aa" letter-spacing="-0.5">crypto</text>
+  <!-- wordmark: 2z (bold green) -->
+  <text x="228" y="48" font-family="'Space Mono', monospace" font-size="28" font-weight="700" fill="#00e676" letter-spacing="-0.5">2z</text>
+  <!-- .com -->
+  <text x="270" y="48" font-family="'Space Mono', monospace" font-size="13" font-weight="400" fill="#2a3f52">.com</text>
+  <!-- tagline -->
+  <text x="90" y="64" font-family="'Space Mono', monospace" font-size="8" font-weight="400" fill="#2a3f52" letter-spacing="0.16em">BITCOIN · LIGHTNING · DCA</text>
+</svg>
