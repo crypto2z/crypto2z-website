@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Markets — crypto2z.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#080c10;
+  --bg2:#0d1117;
+  --bg3:#131920;
+  --border:#1e2d3d;
+  --border2:#2a3f52;
+  --green:#00e676;
+  --green-dim:#00c853;
+  --red:#ff5252;
+  --amber:#ffab40;
+  --text:#e8f0fe;
+  --text2:#8899aa;
+  --text3:#4a6070;
+  --mono:'Space Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --accent:#00e676;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.6;
+  min-height:100vh;
+}
+
+/* scanline overlay */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
+  pointer-events:none;
+  z-index:999;
+}
+
+/* NAV */
+nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(8,12,16,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 2rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:56px;
+}
+.nav-logo{
+  font-family:var(--mono);
+  font-size:16px;
+  color:var(--green);
+  text-decoration:none;
+  letter-spacing:-0.5px;
+}
+.nav-logo span{color:var(--text2)}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{
+  display:block;
+  padding:0 1rem;
+  height:56px;
+  line-height:56px;
+  color:var(--text2);
+  text-decoration:none;
+  font-size:13px;
+  font-family:var(--mono);
+  letter-spacing:0.02em;
+  transition:color 0.15s;
+  border-bottom:2px solid transparent;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--green)}
+.nav-links a.active{color:var(--green)}
+.nav-status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text3);
+}
+.status-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 6px var(--green);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* MAIN LAYOUT */
+main{max-width:1280px;margin:0 auto;padding:2rem 2rem 4rem}
+
+/* PAGE HEADER */
+.page-header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:2rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--border);
+}
+.page-title{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.15em;
+  color:var(--text3);
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.page-title-big{
+  font-family:var(--mono);
+  font-size:28px;
+  color:var(--text);
+  font-weight:700;
+  letter-spacing:-1px;
+}
+.page-title-big em{color:var(--green);font-style:normal}
+.last-updated{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text3);
+  text-align:right;
+}
+
+/* RANGE TABS */
+.range-tabs{
+  display:flex;
+  gap:4px;
+  margin-bottom:1.5rem;
+}
+.range-tab{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.08em;
+  padding:6px 14px;
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text3);
+  cursor:pointer;
+  transition:all 0.15s;
+}
+.range-tab:hover{border-color:var(--border2);color:var(--text2)}
+.range-tab.active{
+  background:var(--green);
+  border-color:var(--green);
+  color:#000;
+  font-weight:700;
+}
+
+/* COIN GRID */
+.coin-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(580px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+}
+
+/* COIN CARD */
+.coin-card{
+  background:var(--bg2);
+  padding:1.25rem 1.5rem 1rem;
+  transition:background 0.2s;
+  cursor:pointer;
+}
+.coin-card:hover{background:var(--bg3)}
+
+.coin-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:0.75rem;
+}
+.coin-identity{display:flex;align-items:center;gap:10px}
+.coin-symbol{
+  font-family:var(--mono);
+  font-size:16px;
+  font-weight:700;
+  color:var(--text);
+  letter-spacing:0.05em;
+}
+.coin-name{
+  font-size:12px;
+  color:var(--text3);
+  font-family:var(--mono);
+}
+.coin-rank{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text3);
+  border:1px solid var(--border);
+  padding:2px 6px;
+}
+
+.coin-prices{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:0.5rem;
+}
+.coin-price{
+  font-family:var(--mono);
+  font-size:22px;
+  font-weight:700;
+  color:var(--text);
+}
+.coin-change{
+  font-family:var(--mono);
+  font-size:13px;
+  font-weight:700;
+}
+.coin-change.up{color:var(--green)}
+.coin-change.down{color:var(--red)}
+
+.coin-stats{
+  display:flex;
+  gap:1.5rem;
+  margin-bottom:1rem;
+}
+.stat{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase}
+.stat-value{font-family:var(--mono);font-size:12px;color:var(--text2)}
+
+/* CHART CONTAINER */
+.chart-wrap{
+  position:relative;
+  height:90px;
+}
+.chart-wrap canvas{width:100%!important}
+
+/* LOADING / ERROR states */
+.loading-state{
+  height:90px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text3);
+}
+.loading-dots::after{
+  content:'...';
+  animation:dots 1.2s infinite;
+}
+@keyframes dots{
+  0%{content:'.'}
+  33%{content:'..'}
+  66%{content:'...'}
+}
+
+/* MARKET OVERVIEW BAR */
+.overview-bar{
+  display:flex;
+  gap:0;
+  margin-bottom:2rem;
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.overview-item{
+  flex:1;
+  padding:1rem 1.25rem;
+  border-right:1px solid var(--border);
+}
+.overview-item:last-child{border-right:none}
+.overview-item-label{
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:0.12em;
+  color:var(--text3);
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.overview-item-value{
+  font-family:var(--mono);
+  font-size:15px;
+  font-weight:700;
+  color:var(--text);
+}
+.overview-item-value.up{color:var(--green)}
+.overview-item-value.down{color:var(--red)}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);
+  padding:1.5rem 2rem;
+  margin-top:4rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  max-width:1280px;
+  margin-left:auto;
+  margin-right:auto;
+}
+footer p{font-family:var(--mono);font-size:11px;color:var(--text3)}
+footer a{color:var(--text3);text-decoration:none}
+footer a:hover{color:var(--green)}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  nav{padding:0 1rem}
+  main{padding:1rem 1rem 3rem}
+  .coin-grid{grid-template-columns:1fr}
+  .overview-bar{flex-wrap:wrap}
+  .overview-item{flex:1 1 45%;border-bottom:1px solid var(--border)}
+  .page-header{flex-direction:column;align-items:flex-start;gap:0.5rem}
+  .coin-stats{gap:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">crypto<span>2z</span>.com</a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="markets.html" class="active">markets</a></li>
+    <li><a href="portfolio.html">portfolio</a></li>
+    <li><a href="tools.html">tools</a></li>
+    <li><a href="blog.html">blog</a></li>
+    <li><a href="support.html">⚡ support</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    live
+  </div>
+</nav>
+
+<main>
+
+  <div class="page-header">
+    <div>
+      <div class="page-title">// market data</div>
+      <div class="page-title-big"><em>Markets</em></div>
+    </div>
+    <div class="last-updated">
+      data via CoinGecko API<br/>
+      <span id="last-updated-time">fetching...</span>
+    </div>
+  </div>
+
+  <!-- OVERVIEW BAR -->
+  <div class="overview-bar">
+    <div class="overview-item">
+      <div class="overview-item-label">BTC dominance</div>
+      <div class="overview-item-value" id="btc-dom">—</div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-item-label">Total mkt cap</div>
+      <div class="overview-item-value" id="total-mcap">—</div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-item-label">24h volume</div>
+      <div class="overview-item-value" id="total-vol">—</div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-item-label">Fear &amp; greed</div>
+      <div class="overview-item-value" id="fear-greed">—</div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-item-label">Active coins</div>
+      <div class="overview-item-value" id="active-coins">—</div>
+    </div>
+  </div>
+
+  <!-- RANGE TABS -->
+  <div class="range-tabs">
+    <button class="range-tab active" data-days="1">1D</button>
+    <button class="range-tab" data-days="7">7D</button>
+    <button class="range-tab" data-days="30">30D</button>
+    <button class="range-tab" data-days="365">1Y</button>
+  </div>
+
+  <!-- COIN GRID -->
+  <div class="coin-grid" id="coin-grid"></div>
+
+</main>
+
+<footer>
+  <p>crypto2z.com &mdash; <a href="support.html">⚡ support the node</a></p>
+  <p>data: <a href="https://coingecko.com" target="_blank" rel="noopener">coingecko</a> &bull; not financial advice</p>
+</footer>
+
+<script>
+const COINS = [
+  {id:'bitcoin',       symbol:'BTC', name:'Bitcoin',   cgid:'bitcoin'},
+  {id:'ethereum',      symbol:'ETH', name:'Ethereum',  cgid:'ethereum'},
+  {id:'cardano',       symbol:'ADA', name:'Cardano',   cgid:'cardano'},
+  {id:'avalanche-2',   symbol:'AVAX',name:'Avalanche', cgid:'avalanche-2'},
+  {id:'cosmos',        symbol:'ATOM',name:'Cosmos',    cgid:'cosmos'},
+  {id:'matic-network', symbol:'POL', name:'Polygon',   cgid:'matic-network'},
+  {id:'stellar',       symbol:'XLM', name:'Stellar',   cgid:'stellar'},
+  {id:'ripple',        symbol:'XRP', name:'XRP',       cgid:'ripple'},
+];
+
+let currentDays = 1;
+let priceData = {};
+let chartInstances = {};
+
+function fmt(n,digits=2){
+  if(n>=1e12) return '$'+(n/1e12).toFixed(2)+'T';
+  if(n>=1e9)  return '$'+(n/1e9).toFixed(2)+'B';
+  if(n>=1e6)  return '$'+(n/1e6).toFixed(2)+'M';
+  if(n>=1e3)  return '$'+n.toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits});
+  return '$'+n.toFixed(digits<2?2:digits);
+}
+
+function fmtPrice(p){
+  if(p>=1000) return '$'+p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(p>=1)    return '$'+p.toFixed(4);
+  return '$'+p.toFixed(6);
+}
+
+function fmtPct(p){return (p>=0?'+':'')+p.toFixed(2)+'%'}
+
+async function fetchGlobal(){
+  try{
+    const r = await fetch('https://api.coingecko.com/api/v3/global');
+    const d = await r.json();
+    const g = d.data;
+    document.getElementById('btc-dom').textContent = g.market_cap_percentage.btc.toFixed(1)+'%';
+    document.getElementById('total-mcap').textContent = fmt(g.total_market_cap.usd);
+    document.getElementById('total-vol').textContent = fmt(g.total_volume.usd);
+    document.getElementById('active-coins').textContent = g.active_cryptocurrencies.toLocaleString();
+  }catch(e){console.warn('global fetch failed',e)}
+}
+
+async function fetchFearGreed(){
+  try{
+    const r = await fetch('https://api.alternative.me/fng/');
+    const d = await r.json();
+    const val = d.data[0];
+    const el = document.getElementById('fear-greed');
+    el.textContent = val.value+' / '+val.value_classification;
+    const v = parseInt(val.value);
+    el.className = 'overview-item-value'+(v>=60?' up':v<=40?' down':'');
+  }catch(e){
+    document.getElementById('fear-greed').textContent = 'n/a';
+  }
+}
+
+async function fetchPrices(){
+  const ids = COINS.map(c=>c.cgid).join(',');
+  const r = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=1h,24h,7d`);
+  return await r.json();
+}
+
+async function fetchHistory(coinId, days){
+  const interval = days<=1?'hourly':days<=90?'daily':'daily';
+  const r = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=${interval}`);
+  const d = await r.json();
+  return d.prices || [];
+}
+
+function buildCard(coin, marketData){
+  const md = marketData.find(m=>m.id===coin.cgid)||{};
+  const price = md.current_price||0;
+  const change24 = md.price_change_percentage_24h||0;
+  const change7d = md.price_change_percentage_7d_in_currency||0;
+  const mcap = md.market_cap||0;
+  const vol = md.total_volume||0;
+  const rank = md.market_cap_rank||'—';
+
+  const pctClass = change24>=0?'up':'down';
+  const pct7Class = change7d>=0?'up':'down';
+
+  return `
+  <div class="coin-card" id="card-${coin.symbol}">
+    <div class="coin-header">
+      <div class="coin-identity">
+        <div>
+          <div class="coin-symbol">${coin.symbol}</div>
+          <div class="coin-name">${coin.name}</div>
+        </div>
+      </div>
+      <div class="coin-rank">#${rank}</div>
+    </div>
+    <div class="coin-prices">
+      <div class="coin-price">${fmtPrice(price)}</div>
+      <div class="coin-change ${pctClass}">${fmtPct(change24)}</div>
+    </div>
+    <div class="coin-stats">
+      <div class="stat">
+        <div class="stat-label">mkt cap</div>
+        <div class="stat-value">${fmt(mcap)}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">24h vol</div>
+        <div class="stat-value">${fmt(vol)}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">7d</div>
+        <div class="stat-value" style="color:${change7d>=0?'var(--green)':'var(--red)'}">${fmtPct(change7d)}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">52w high</div>
+        <div class="stat-value">${md.ath?fmtPrice(md.ath):'—'}</div>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div class="loading-state"><span class="loading-dots">loading chart</span></div>
+    </div>
+  </div>`;
+}
+
+function renderChart(coin, prices, days){
+  const card = document.getElementById('card-'+coin.symbol);
+  if(!card) return;
+  const wrap = card.querySelector('.chart-wrap');
+
+  // destroy old chart
+  if(chartInstances[coin.symbol]){
+    chartInstances[coin.symbol].destroy();
+    delete chartInstances[coin.symbol];
+  }
+
+  if(!prices || prices.length===0){
+    wrap.innerHTML='<div class="loading-state" style="color:var(--text3)">no data</div>';
+    return;
+  }
+
+  const labels = prices.map(p=>{
+    const d=new Date(p[0]);
+    if(days<=1) return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    return d.toLocaleDateString([],{month:'short',day:'numeric'});
+  });
+  const vals = prices.map(p=>p[1]);
+  const first = vals[0], last = vals[vals.length-1];
+  const isUp = last>=first;
+  const color = isUp?'#00e676':'#ff5252';
+
+  wrap.innerHTML='<canvas></canvas>';
+  const ctx = wrap.querySelector('canvas').getContext('2d');
+
+  const grad = ctx.createLinearGradient(0,0,0,90);
+  grad.addColorStop(0, isUp?'rgba(0,230,118,0.18)':'rgba(255,82,82,0.18)');
+  grad.addColorStop(1,'rgba(0,0,0,0)');
+
+  chartInstances[coin.symbol] = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[{
+        data:vals,
+        borderColor:color,
+        borderWidth:1.5,
+        fill:true,
+        backgroundColor:grad,
+        pointRadius:0,
+        tension:0.3,
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{intersect:false,mode:'index'},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(13,17,23,0.95)',
+          borderColor:'#1e2d3d',
+          borderWidth:1,
+          titleColor:'#8899aa',
+          bodyColor:'#e8f0fe',
+          titleFont:{family:'Space Mono',size:10},
+          bodyFont:{family:'Space Mono',size:11},
+          callbacks:{
+            label:ctx=>fmtPrice(ctx.parsed.y)
+          }
+        }
+      },
+      scales:{
+        x:{display:false},
+        y:{
+          display:true,
+          position:'right',
+          grid:{color:'rgba(30,45,61,0.5)',drawBorder:false},
+          ticks:{
+            color:'#4a6070',
+            font:{family:'Space Mono',size:9},
+            maxTicksLimit:3,
+            callback:v=>fmtPrice(v)
+          }
+        }
+      }
+    }
+  });
+}
+
+async function loadAllCharts(days){
+  for(const coin of COINS){
+    try{
+      const prices = await fetchHistory(coin.cgid, days);
+      priceData[coin.symbol] = priceData[coin.symbol]||{};
+      priceData[coin.symbol][days] = prices;
+      renderChart(coin, prices, days);
+    }catch(e){
+      console.warn('chart fetch failed for',coin.symbol,e);
+      const card = document.getElementById('card-'+coin.symbol);
+      if(card){
+        const wrap = card.querySelector('.chart-wrap');
+        wrap.innerHTML='<div class="loading-state" style="color:var(--red)">fetch error — CoinGecko rate limit, refresh in 60s</div>';
+      }
+    }
+    // small delay to avoid rate limiting
+    await new Promise(r=>setTimeout(r,350));
+  }
+}
+
+async function init(){
+  const grid = document.getElementById('coin-grid');
+  let marketData = [];
+
+  try{
+    marketData = await fetchPrices();
+  }catch(e){
+    console.warn('market fetch failed',e);
+  }
+
+  // render all cards
+  grid.innerHTML = COINS.map(c=>buildCard(c, marketData)).join('');
+
+  // update timestamp
+  document.getElementById('last-updated-time').textContent =
+    'updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+  // fetch global + fear/greed
+  fetchGlobal();
+  fetchFearGreed();
+
+  // load charts for default range
+  await loadAllCharts(currentDays);
+}
+
+// Range tab switching
+document.querySelectorAll('.range-tab').forEach(btn=>{
+  btn.addEventListener('click',async function(){
+    document.querySelectorAll('.range-tab').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    currentDays = parseInt(this.dataset.days);
+
+    // show loading on all charts
+    COINS.forEach(c=>{
+      const card = document.getElementById('card-'+c.symbol);
+      if(card){
+        const wrap = card.querySelector('.chart-wrap');
+        if(chartInstances[c.symbol]){chartInstances[c.symbol].destroy();delete chartInstances[c.symbol]}
+        wrap.innerHTML='<div class="loading-state"><span class="loading-dots">loading chart</span></div>';
+      }
+    });
+
+    await loadAllCharts(currentDays);
+  });
+});
+
+// Auto-refresh prices every 60 seconds (not charts, to avoid rate limits)
+setInterval(async()=>{
+  try{
+    const marketData = await fetchPrices();
+    COINS.forEach(c=>{
+      const md = marketData.find(m=>m.id===c.cgid)||{};
+      const card = document.getElementById('card-'+c.symbol);
+      if(!card) return;
+      const price = md.current_price||0;
+      const change24 = md.price_change_percentage_24h||0;
+      const change7d = md.price_change_percentage_7d_in_currency||0;
+      card.querySelector('.coin-price').textContent = fmtPrice(price);
+      const changeEl = card.querySelector('.coin-change');
+      changeEl.textContent = fmtPct(change24);
+      changeEl.className = 'coin-change '+(change24>=0?'up':'down');
+    });
+    document.getElementById('last-updated-time').textContent =
+      'updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    fetchGlobal();
+    fetchFearGreed();
+  }catch(e){console.warn('refresh failed',e)}
+}, 60000);
+
+init();
+</script>
+</body>
+</html>

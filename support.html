@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Support — crypto2z.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c10;--bg2:#0d1117;--bg3:#131920;
+  --border:#1e2d3d;--border2:#2a3f52;
+  --green:#00e676;--red:#ff5252;--amber:#ffab40;--blue:#40c4ff;
+  --text:#e8f0fe;--text2:#8899aa;--text3:#4a6070;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:999}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:var(--mono);font-size:16px;color:var(--green);text-decoration:none;letter-spacing:-0.5px}
+.nav-logo span{color:var(--text2)}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{display:block;padding:0 1rem;height:56px;line-height:56px;color:var(--text2);text-decoration:none;font-size:13px;font-family:var(--mono);letter-spacing:0.02em;transition:color 0.15s;border-bottom:2px solid transparent}
+.nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--green)}
+.nav-links a.active{color:var(--amber);border-bottom-color:var(--amber)}
+.nav-links a.cta{color:var(--amber)}
+.nav-status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text3)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+main{max-width:900px;margin:0 auto;padding:2rem 2rem 5rem}
+
+/* PAGE HEADER */
+.page-header{text-align:center;padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem}
+.page-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--amber);text-transform:uppercase;margin-bottom:0.75rem}
+.page-title{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--text);letter-spacing:-1.5px;margin-bottom:0.75rem}
+.page-title em{color:var(--amber);font-style:normal}
+.page-sub{font-size:16px;color:var(--text2);max-width:500px;margin:0 auto;font-weight:300;line-height:1.7}
+
+/* SUPPORT CARDS */
+.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px}
+.support-card{background:var(--bg2);padding:2rem}
+.support-card-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.support-card-icon{font-size:28px;margin-bottom:0.75rem}
+.support-card-title{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.5px}
+.support-card-desc{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.5}
+
+/* QR CODE PLACEHOLDER */
+.qr-wrap{
+  width:180px;height:180px;margin:0 auto 1.25rem;
+  background:var(--bg);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.qr-wrap canvas{display:block}
+.qr-placeholder{
+  font-family:var(--mono);font-size:10px;color:var(--text3);
+  text-align:center;padding:1rem;line-height:1.5;
+}
+
+/* ADDRESS BOX */
+.addr-box{
+  background:var(--bg);border:1px solid var(--border);
+  padding:10px 12px;margin-bottom:1rem;
+  font-family:var(--mono);font-size:11px;color:var(--text2);
+  word-break:break-all;line-height:1.6;
+  cursor:pointer;transition:border-color 0.15s;position:relative;
+}
+.addr-box:hover{border-color:var(--green)}
+.addr-box.copied{border-color:var(--green);color:var(--green)}
+.copy-hint{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.1em;
+  color:var(--text3);text-transform:uppercase;margin-bottom:6px;
+}
+.copy-toast{
+  display:none;position:absolute;right:8px;top:8px;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.1em;
+  color:var(--green);background:var(--bg2);padding:2px 6px;border:1px solid var(--green);
+}
+.addr-box.copied .copy-toast{display:block}
+
+/* AMOUNT PILLS */
+.amount-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.pill{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.05em;
+  padding:6px 12px;border:1px solid var(--border);
+  color:var(--text3);background:transparent;cursor:pointer;transition:all 0.15s;
+}
+.pill:hover,.pill.active{border-color:var(--amber);color:var(--amber);background:rgba(255,171,64,0.05)}
+
+/* LNURL / LIGHTNING ADDRESS */
+.ln-address{
+  background:rgba(0,230,118,0.05);border:1px solid rgba(0,230,118,0.2);
+  padding:1rem;margin-bottom:1rem;text-align:center;
+}
+.ln-address-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
+.ln-address-val{font-family:var(--mono);font-size:15px;color:var(--green);font-weight:700}
+
+/* SEND BTN */
+.send-btn{
+  display:block;width:100%;text-align:center;
+  font-family:var(--mono);font-size:12px;letter-spacing:0.08em;font-weight:700;
+  padding:12px;text-decoration:none;
+  border:1px solid;transition:all 0.15s;cursor:pointer;
+}
+.btn-lightning{background:var(--amber);border-color:var(--amber);color:#000}
+.btn-lightning:hover{background:transparent;color:var(--amber)}
+.btn-onchain{background:transparent;border-color:var(--border2);color:var(--text2);margin-top:6px}
+.btn-onchain:hover{border-color:var(--green);color:var(--green)}
+
+/* THANK YOU SECTION */
+.thankyou-card{background:var(--bg2);border:1px solid var(--border);border-top:none;padding:2rem;text-align:center}
+.thankyou-title{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--text);margin-bottom:0.5rem}
+.thankyou-text{font-size:14px;color:var(--text2);line-height:1.7;max-width:520px;margin:0 auto}
+
+/* WHAT IT FUNDS */
+.funds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-top:none;margin-bottom:3rem}
+.fund-block{background:var(--bg2);padding:1.25rem;text-align:center}
+.fund-icon{font-size:20px;margin-bottom:0.5rem}
+.fund-title{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px}
+.fund-desc{font-size:12px;color:var(--text3);line-height:1.5}
+
+/* NODE CARD */
+.node-mini{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:1.5rem;margin-top:2rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.node-mini-left{}
+.node-mini-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.node-mini-alias{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)}
+.node-mini-pubkey{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px;word-break:break-all}
+.node-mini-right{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.online-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);color:var(--green);padding:4px 10px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.online-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.amboss-link{font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none}
+.amboss-link:hover{color:var(--green)}
+
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:0 auto}
+footer p{font-family:var(--mono);font-size:11px;color:var(--text3)}
+footer a{color:var(--text3);text-decoration:none}
+footer a:hover{color:var(--green)}
+
+@media(max-width:700px){
+  nav{padding:0 1rem}.nav-links{display:none}
+  main{padding:1rem 1rem 3rem}
+  .support-grid{grid-template-columns:1fr}
+  .funds-grid{grid-template-columns:1fr}
+  .node-mini{flex-direction:column;align-items:flex-start}
+  .node-mini-right{align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">crypto<span>2z</span>.com</a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="markets.html">markets</a></li>
+    <li><a href="portfolio.html">portfolio</a></li>
+    <li><a href="tools.html">tools</a></li>
+    <li><a href="blog.html">blog</a></li>
+    <li><a href="support.html" class="cta active">⚡ support</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>node online</div>
+</nav>
+
+<main>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-tag">// support the node</div>
+    <div class="page-title">Send some <em>⚡ sats</em></div>
+    <p class="page-sub">If this site, the tools, or any of the guides have been useful — feel free to send sats. Every bit keeps the node routing and the bot running.</p>
+  </div>
+
+  <!-- SUPPORT CARDS -->
+  <div class="support-grid">
+
+    <!-- LIGHTNING -->
+    <div class="support-card">
+      <div class="support-card-header">
+        <div class="support-card-icon">⚡</div>
+        <div class="support-card-title">Lightning Network</div>
+        <div class="support-card-desc">Instant, near-zero fee. Scan the QR or pay to the Lightning address. Works with any LN wallet — Zeus, Wallet of Satoshi, Phoenix, Muun.</div>
+      </div>
+
+      <!-- Lightning Address -->
+      <div class="ln-address">
+        <div class="ln-address-label">lightning address</div>
+        <div class="ln-address-val" id="ln-addr">steve2z@getalby.com</div>
+      </div>
+
+      <!-- Amount pills -->
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">quick amounts</div>
+      <div class="amount-pills">
+        <button class="pill" onclick="setPill(this,'1000')">1K sats</button>
+        <button class="pill" onclick="setPill(this,'5000')">5K sats</button>
+        <button class="pill" onclick="setPill(this,'10000')">10K sats</button>
+        <button class="pill" onclick="setPill(this,'21000')">21K sats</button>
+        <button class="pill" onclick="setPill(this,'100000')">100K sats</button>
+      </div>
+
+      <!-- QR -->
+      <div class="qr-wrap" id="ln-qr-wrap">
+        <div class="qr-placeholder">
+          Add your LNURL or Lightning<br/>invoice QR code here.<br/><br/>
+          Generate one at<br/>getalby.com or lnbits.
+        </div>
+      </div>
+
+      <div class="copy-hint">tap to copy lightning address</div>
+      <div class="addr-box" id="ln-copy" onclick="copyAddr('ln-copy','steve2z@getalby.com')">
+        steve2z@getalby.com
+        <span class="copy-toast">copied!</span>
+      </div>
+
+      <a href="lightning:steve2z@getalby.com" class="send-btn btn-lightning">⚡ open in lightning wallet</a>
+    </div>
+
+    <!-- ON-CHAIN BTC -->
+    <div class="support-card">
+      <div class="support-card-header">
+        <div class="support-card-icon">₿</div>
+        <div class="support-card-title">On-Chain Bitcoin</div>
+        <div class="support-card-desc">For larger amounts or if you don't have a Lightning wallet. Standard on-chain BTC transaction — any Bitcoin wallet works.</div>
+      </div>
+
+      <!-- QR placeholder -->
+      <div class="qr-wrap" style="margin-bottom:1.25rem">
+        <div class="qr-placeholder">
+          Paste your Bitcoin<br/>receive address QR<br/>here.<br/><br/>
+          Generate in your wallet<br/>or on your node.
+        </div>
+      </div>
+
+      <div class="copy-hint">tap to copy bitcoin address</div>
+      <div class="addr-box" id="btc-copy" onclick="copyAddr('btc-copy','YOUR_BTC_ADDRESS_HERE')">
+        YOUR_BTC_ADDRESS_HERE
+        <span class="copy-toast">copied!</span>
+      </div>
+
+      <div style="margin-top:0.5rem;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6">
+        ↳ Replace this address with your actual Bitcoin receive address before publishing.
+      </div>
+
+      <!-- Why on-chain -->
+      <div style="margin-top:1.5rem;padding:1rem;background:var(--bg);border:1px solid var(--border)">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">on-chain vs lightning</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);line-height:1.8">
+          ⚡ Lightning → instant, &lt;1 sat fee, &lt; 1M sats<br/>
+          ₿ On-chain → slower, miner fee, any amount
+        </div>
+      </div>
+
+      <a href="markets.html" class="send-btn btn-onchain" style="margin-top:1rem;display:block;text-align:center;text-decoration:none">📈 explore markets instead</a>
+    </div>
+
+  </div><!-- /support-grid -->
+
+  <!-- THANK YOU -->
+  <div class="thankyou-card">
+    <div class="thankyou-title">🙏 thank you</div>
+    <p class="thankyou-text">Every sat sent goes directly toward keeping this node online, funding the VPS that runs the DCA bot, and the time spent writing guides. The Lightning Network is only as strong as the nodes routing it — appreciate every contribution.</p>
+  </div>
+
+  <!-- WHAT IT FUNDS -->
+  <div class="funds-grid">
+    <div class="fund-block">
+      <div class="fund-icon">🖥️</div>
+      <div class="fund-title">Server costs</div>
+      <div class="fund-desc">DigitalOcean droplet running the DCA bot and Flask dashboard 24/7</div>
+    </div>
+    <div class="fund-block">
+      <div class="fund-icon">⚡</div>
+      <div class="fund-title">Node hardware</div>
+      <div class="fund-desc">Raspberry Pi 5, NVMe storage, and the electricity to keep it all running</div>
+    </div>
+    <div class="fund-block">
+      <div class="fund-icon">📝</div>
+      <div class="fund-title">Time & writing</div>
+      <div class="fund-desc">Hours of debugging, documenting, and sharing what I learn publicly</div>
+    </div>
+  </div>
+
+  <!-- NODE CARD -->
+  <div class="node-mini">
+    <div class="node-mini-left">
+      <div class="node-mini-label">// routing sats on the lightning network</div>
+      <div class="node-mini-alias">⚡ steve2z</div>
+      <div class="node-mini-pubkey">027f5cbfc...f1215 · active since 2021/2022</div>
+    </div>
+    <div class="node-mini-right">
+      <div class="online-badge">node online</div>
+      <a href="https://amboss.space/node/027f5cbfc" target="_blank" rel="noopener" class="amboss-link">view on amboss →</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>crypto2z.com · not financial advice</p>
+  <p><a href="index.html">home</a> · <a href="markets.html">markets</a> · <a href="tools.html">tools</a></p>
+</footer>
+
+<script>
+function copyAddr(id, text){
+  navigator.clipboard.writeText(text).then(()=>{
+    const el = document.getElementById(id);
+    el.classList.add('copied');
+    setTimeout(()=>el.classList.remove('copied'),2000);
+  });
+}
+
+function setPill(btn, sats){
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  // Could open a payment modal or LNURL here in future
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfolio — crypto2z.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c10;--bg2:#0d1117;--bg3:#131920;
+  --border:#1e2d3d;--border2:#2a3f52;
+  --green:#00e676;--red:#ff5252;--amber:#ffab40;--blue:#40c4ff;--purple:#b388ff;
+  --text:#e8f0fe;--text2:#8899aa;--text3:#4a6070;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:999}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:var(--mono);font-size:16px;color:var(--green);text-decoration:none;letter-spacing:-0.5px}
+.nav-logo span{color:var(--text2)}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{display:block;padding:0 1rem;height:56px;line-height:56px;color:var(--text2);text-decoration:none;font-size:13px;font-family:var(--mono);letter-spacing:0.02em;transition:color 0.15s;border-bottom:2px solid transparent}
+.nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--green)}
+.nav-links a.active{color:var(--green)}
+.nav-links a.cta{color:var(--amber)}
+.nav-links a.cta:hover{border-bottom-color:var(--amber)}
+.nav-status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text3)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* LAYOUT */
+main{max-width:1280px;margin:0 auto;padding:2rem 2rem 5rem}
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.page-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.page-title{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--text);letter-spacing:-1px}
+.page-title em{color:var(--green);font-style:normal}
+
+/* DISCLAIMER */
+.disclaimer{
+  background:rgba(255,171,64,0.06);border:1px solid rgba(255,171,64,0.25);
+  padding:0.75rem 1rem;margin-bottom:2rem;
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;color:var(--amber);
+}
+
+/* OVERVIEW CARDS */
+.overview-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px}
+.ov-card{background:var(--bg2);padding:1.5rem}
+.ov-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
+.ov-value{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--text)}
+.ov-value em{font-style:normal}
+.ov-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px}
+
+/* MAIN GRID */
+.port-grid{display:grid;grid-template-columns:1fr 340px;gap:1px;background:var(--border);border:1px solid var(--border);border-top:none}
+
+/* HOLDINGS TABLE */
+.holdings-card{background:var(--bg2);padding:0}
+.card-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-head-title{font-family:var(--mono);font-size:12px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase}
+.live-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);color:var(--green);padding:3px 8px;display:flex;align-items:center;gap:5px}
+.live-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+
+table{width:100%;border-collapse:collapse}
+th{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;text-align:left;padding:10px 1.5rem;border-bottom:1px solid var(--border);font-weight:400;white-space:nowrap}
+th:not(:first-child){text-align:right}
+td{font-family:var(--mono);font-size:13px;padding:12px 1.5rem;border-bottom:1px solid var(--border);vertical-align:middle}
+td:not(:first-child){text-align:right}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.td-sym{font-weight:700;color:var(--text)}
+.td-name{font-size:10px;color:var(--text3);margin-top:2px}
+.td-price{color:var(--text2)}
+.td-chg.up{color:var(--green)}
+.td-chg.down{color:var(--red)}
+.td-val{color:var(--text);font-weight:700}
+.td-dca{color:var(--text3);font-size:11px}
+.cornerstone-badge{
+  display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:0.06em;
+  padding:2px 6px;border:1px solid rgba(255,171,64,0.4);color:var(--amber);margin-left:6px;vertical-align:middle;
+}
+
+/* SIDEBAR */
+.sidebar{background:var(--bg2);display:flex;flex-direction:column}
+.sidebar-section{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)}
+.sidebar-section:last-child{border-bottom:none}
+.sidebar-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:0.75rem}
+
+/* DONUT CHART */
+.chart-wrap{position:relative;width:160px;height:160px;margin:0 auto 1rem}
+
+/* LEGEND */
+.legend{display:flex;flex-direction:column;gap:6px}
+.legend-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-sym{font-family:var(--mono);font-size:11px;color:var(--text2);flex:1}
+.legend-pct{font-family:var(--mono);font-size:11px;color:var(--text3)}
+
+/* BOT STATUS */
+.bot-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.bot-row:last-child{border-bottom:none}
+.bot-key{font-family:var(--mono);font-size:10px;color:var(--text3)}
+.bot-val{font-family:var(--mono);font-size:11px;color:var(--text2)}
+.bot-val.on{color:var(--green)}
+
+/* NODE MINI */
+.node-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.node-row:last-child{border-bottom:none}
+.node-key{font-family:var(--mono);font-size:10px;color:var(--text3)}
+.node-val{font-family:var(--mono);font-size:11px;color:var(--text2)}
+
+/* STRATEGY SECTION */
+.strategy-section{border:1px solid var(--border);border-top:none;background:var(--bg2)}
+.strategy-inner{padding:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.strat-block-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:0.5rem}
+.strat-block-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);margin-bottom:0.5rem}
+.strat-block-text{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto}
+footer p{font-family:var(--mono);font-size:11px;color:var(--text3)}
+footer a{color:var(--text3);text-decoration:none}
+footer a:hover{color:var(--green)}
+
+@media(max-width:900px){
+  nav{padding:0 1rem}.nav-links{display:none}
+  main{padding:1rem 1rem 3rem}
+  .overview-row{grid-template-columns:1fr 1fr}
+  .port-grid{grid-template-columns:1fr}
+  .strategy-inner{grid-template-columns:1fr}
+  th,td{padding:10px 1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">crypto<span>2z</span>.com</a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="markets.html">markets</a></li>
+    <li><a href="portfolio.html" class="active">portfolio</a></li>
+    <li><a href="tools.html">tools</a></li>
+    <li><a href="blog.html">blog</a></li>
+    <li><a href="support.html" class="cta">⚡ support</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>node online</div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div>
+      <div class="page-tag">// steve2z</div>
+      <div class="page-title"><em>Portfolio</em></div>
+    </div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:right">prices live · holdings illustrative<br/><span id="port-time">—</span></div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠ &nbsp;Holdings shown are for transparency only. No exact quantities are disclosed. Prices are live. This is not financial advice.
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="overview-row">
+    <div class="ov-card">
+      <div class="ov-label">strategy</div>
+      <div class="ov-value" style="font-size:16px;line-height:1.4">DCA<br/>Mon·Wed·Fri</div>
+      <div class="ov-sub">$2/coin · 8 coins</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-label">weekly spend</div>
+      <div class="ov-value"><em style="color:var(--amber)">$48</em></div>
+      <div class="ov-sub">3 days × 8 coins × $2</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-label">cornerstone</div>
+      <div class="ov-value" style="color:var(--amber)">BTC</div>
+      <div class="ov-sub">no trailing stop</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-label">exchange</div>
+      <div class="ov-value" style="font-size:16px">Coinbase</div>
+      <div class="ov-sub">Advanced Trade · USDC pairs</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="port-grid">
+
+    <!-- HOLDINGS TABLE -->
+    <div class="holdings-card">
+      <div class="card-head">
+        <div class="card-head-title">// holdings</div>
+        <div class="live-badge">live prices</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>asset</th>
+            <th>price</th>
+            <th>24h</th>
+            <th>7d</th>
+            <th>dip threshold</th>
+            <th>pair</th>
+          </tr>
+        </thead>
+        <tbody id="port-tbody">
+          <tr><td colspan="6" style="text-align:center;color:var(--text3);font-family:var(--mono);font-size:11px;padding:2rem">fetching live data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- DONUT CHART -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">// allocation by coin</div>
+        <div class="chart-wrap">
+          <canvas id="donut-chart"></canvas>
+        </div>
+        <div class="legend" id="donut-legend"></div>
+      </div>
+
+      <!-- BOT STATUS -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">// dca bot status</div>
+        <div class="bot-row"><span class="bot-key">service</span><span class="bot-val on">● running</span></div>
+        <div class="bot-row"><span class="bot-key">platform</span><span class="bot-val">DigitalOcean</span></div>
+        <div class="bot-row"><span class="bot-key">buy days</span><span class="bot-val">Mon · Wed · Fri</span></div>
+        <div class="bot-row"><span class="bot-key">order type</span><span class="bot-val">market</span></div>
+        <div class="bot-row"><span class="bot-key">funded via</span><span class="bot-val">USDC (primary)</span></div>
+        <div class="bot-row"><span class="bot-key">dashboard</span><span class="bot-val">Flask · port 5000</span></div>
+        <div class="bot-row"><span class="bot-key">trailing stop</span><span class="bot-val on">● active (non-BTC)</span></div>
+      </div>
+
+      <!-- NODE STATUS -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">// lightning node</div>
+        <div class="node-row"><span class="node-key">alias</span><span class="node-val" style="color:var(--green)">steve2z</span></div>
+        <div class="node-row"><span class="node-key">hardware</span><span class="node-val">Pi 5 · 16GB</span></div>
+        <div class="node-row"><span class="node-key">storage</span><span class="node-val">2TB NVMe</span></div>
+        <div class="node-row"><span class="node-key">software</span><span class="node-val">MyNode · LND</span></div>
+        <div class="node-row"><span class="node-key">online since</span><span class="node-val">2021/2022</span></div>
+        <div class="node-row"><span class="node-key">amboss</span><span class="node-val"><a href="https://amboss.space/node/027f5cbfc" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none">view →</a></span></div>
+      </div>
+
+    </div>
+  </div><!-- /port-grid -->
+
+  <!-- STRATEGY SECTION -->
+  <div class="strategy-section">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase">// investment strategy</div>
+    </div>
+    <div class="strategy-inner">
+      <div>
+        <div class="strat-block-label">core approach</div>
+        <div class="strat-block-title">Dollar Cost Averaging</div>
+        <div class="strat-block-text">Automated buys 3× per week regardless of price. Small fixed amounts remove emotion from entry timing and smooth out volatility over time.</div>
+      </div>
+      <div>
+        <div class="strat-block-label">dip buying</div>
+        <div class="strat-block-title">Volatility-Based Extra Buys</div>
+        <div class="strat-block-text">When a coin drops beyond its historical dip threshold (e.g. BTC −7.5%, AVAX −13.5%), the bot triggers an additional buy on top of the regular DCA.</div>
+      </div>
+      <div>
+        <div class="strat-block-label">risk management</div>
+        <div class="strat-block-title">Trailing Stop System</div>
+        <div class="strat-block-text">Non-BTC coins trigger a 50% position sell if they drop 30% from their 30-day high, checked daily at 10 AM. BTC is held as a cornerstone — never auto-sold.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>crypto2z.com · <a href="support.html">⚡ support the node</a></p>
+  <p>not financial advice · prices: <a href="https://coingecko.com" target="_blank" rel="noopener">coingecko</a></p>
+</footer>
+
+<script>
+const COINS = [
+  {id:'bitcoin',       sym:'BTC', name:'Bitcoin',   threshold:7.5,  cornerstone:true,  color:'#F7931A'},
+  {id:'ethereum',      sym:'ETH', name:'Ethereum',  threshold:10.6, cornerstone:false, color:'#627EEA'},
+  {id:'cardano',       sym:'ADA', name:'Cardano',   threshold:11.6, cornerstone:false, color:'#0033AD'},
+  {id:'avalanche-2',   sym:'AVAX',name:'Avalanche', threshold:13.5, cornerstone:false, color:'#E84142'},
+  {id:'cosmos',        sym:'ATOM',name:'Cosmos',    threshold:10.1, cornerstone:false, color:'#2E3148'},
+  {id:'matic-network', sym:'POL', name:'Polygon',   threshold:12.8, cornerstone:false, color:'#8247E5'},
+  {id:'stellar',       sym:'XLM', name:'Stellar',   threshold:10.1, cornerstone:false, color:'#000000'},
+  {id:'ripple',        sym:'XRP', name:'XRP',       threshold:9.5,  cornerstone:false, color:'#00AAE4'},
+];
+
+let donutChart = null;
+
+function fmtPrice(p){
+  if(p>=1000) return '$'+p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(p>=1)    return '$'+p.toFixed(4);
+  return '$'+p.toFixed(6);
+}
+function fmtPct(p){return (p>=0?'+':'')+p.toFixed(2)+'%'}
+
+async function fetchAndRender(){
+  const ids = COINS.map(c=>c.id).join(',');
+  const r = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h,7d`);
+  const data = await r.json();
+
+  // TABLE
+  const tbody = document.getElementById('port-tbody');
+  tbody.innerHTML = COINS.map(c=>{
+    const d = data.find(m=>m.id===c.id)||{};
+    const price = d.current_price||0;
+    const chg24 = d.price_change_percentage_24h||0;
+    const chg7 = d.price_change_percentage_7d_in_currency||0;
+    const cornerBadge = c.cornerstone?'<span class="cornerstone-badge">cornerstone</span>':'';
+    return `<tr>
+      <td>
+        <div class="td-sym">${c.sym}${cornerBadge}</div>
+        <div class="td-name">${c.name}</div>
+      </td>
+      <td class="td-price">${fmtPrice(price)}</td>
+      <td class="td-chg ${chg24>=0?'up':'down'}">${fmtPct(chg24)}</td>
+      <td class="td-chg ${chg7>=0?'up':'down'}">${fmtPct(chg7)}</td>
+      <td style="color:var(--amber);font-family:var(--mono);font-size:12px">−${c.threshold}%</td>
+      <td class="td-dca">${c.sym}-USDC</td>
+    </tr>`;
+  }).join('');
+
+  // DONUT CHART — equal weight (each coin = 1/8)
+  const pct = 12.5;
+  const colors = COINS.map(c=>c.color);
+  const brightColors = ['#F7931A','#627EEA','#3a7bd5','#E84142','#6F7CBA','#8247E5','#3dd6f5','#00AAE4'];
+
+  if(donutChart) donutChart.destroy();
+  const ctx = document.getElementById('donut-chart').getContext('2d');
+  donutChart = new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:COINS.map(c=>c.sym),
+      datasets:[{
+        data:COINS.map(()=>12.5),
+        backgroundColor:brightColors,
+        borderColor:'#080c10',
+        borderWidth:2,
+        hoverBorderWidth:3,
+      }]
+    },
+    options:{
+      cutout:'68%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(13,17,23,0.95)',
+          borderColor:'#1e2d3d',borderWidth:1,
+          titleFont:{family:'Space Mono',size:11},
+          bodyFont:{family:'Space Mono',size:10},
+          callbacks:{label:ctx=>` ${ctx.label} — equal weight (${pct}%)`}
+        }
+      }
+    }
+  });
+
+  // LEGEND
+  document.getElementById('donut-legend').innerHTML = COINS.map((c,i)=>`
+    <div class="legend-row">
+      <div class="legend-dot" style="background:${brightColors[i]}"></div>
+      <div class="legend-sym">${c.sym}</div>
+      <div class="legend-pct">12.5%</div>
+    </div>
+  `).join('');
+
+  // TIMESTAMP
+  document.getElementById('port-time').textContent =
+    'updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+
+fetchAndRender();
+setInterval(fetchAndRender,60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tools — crypto2z.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c10;--bg2:#0d1117;--bg3:#131920;
+  --border:#1e2d3d;--border2:#2a3f52;
+  --green:#00e676;--red:#ff5252;--amber:#ffab40;--blue:#40c4ff;
+  --text:#e8f0fe;--text2:#8899aa;--text3:#4a6070;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:999}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:var(--mono);font-size:16px;color:var(--green);text-decoration:none;letter-spacing:-0.5px}
+.nav-logo span{color:var(--text2)}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{display:block;padding:0 1rem;height:56px;line-height:56px;color:var(--text2);text-decoration:none;font-size:13px;font-family:var(--mono);letter-spacing:0.02em;transition:color 0.15s;border-bottom:2px solid transparent}
+.nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--green)}
+.nav-links a.active{color:var(--green)}
+.nav-links a.cta{color:var(--amber)}
+.nav-links a.cta:hover{border-bottom-color:var(--amber)}
+.nav-status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text3)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* LAYOUT */
+main{max-width:1280px;margin:0 auto;padding:2rem 2rem 5rem}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.page-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.page-title{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--text);letter-spacing:-1px}
+.page-title em{color:var(--green);font-style:normal}
+
+/* TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px}
+.tools-grid-full{display:grid;grid-template-columns:1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-top:none}
+
+/* TOOL CARD */
+.tool-card{background:var(--bg2);padding:2rem}
+.tool-card-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.tool-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
+.tool-title{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.5px}
+.tool-desc{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.5}
+
+/* INPUTS */
+label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;margin-bottom:6px;margin-top:1rem}
+label:first-of-type{margin-top:0}
+input,select{
+  width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);
+  font-family:var(--mono);font-size:13px;padding:10px 12px;outline:none;
+  transition:border-color 0.15s;appearance:none;
+}
+input:focus,select:focus{border-color:var(--green)}
+select option{background:var(--bg2)}
+
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.input-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* BUTTON */
+.calc-btn{
+  margin-top:1.25rem;width:100%;
+  font-family:var(--mono);font-size:12px;letter-spacing:0.08em;font-weight:700;
+  padding:12px;background:var(--green);border:1px solid var(--green);color:#000;
+  cursor:pointer;transition:all 0.15s;
+}
+.calc-btn:hover{background:transparent;color:var(--green)}
+
+/* RESULTS */
+.result-block{
+  margin-top:1.5rem;padding:1.25rem;
+  background:var(--bg);border:1px solid var(--border);
+  display:none;
+}
+.result-block.show{display:block}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem}
+.result-item-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.result-item-value{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--text)}
+.result-item-value.green{color:var(--green)}
+.result-item-value.amber{color:var(--amber)}
+.result-note{font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;border-top:1px solid var(--border);padding-top:0.75rem;margin-top:0.75rem}
+
+/* VOLATILITY TABLE */
+.vol-table{width:100%;border-collapse:collapse}
+.vol-table th{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);font-weight:400}
+.vol-table td{font-family:var(--mono);font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
+.vol-table tr:last-child td{border-bottom:none}
+.vol-table tr:hover td{background:var(--bg3)}
+.vol-sym{font-weight:700;color:var(--text)}
+.vol-bar-wrap{width:120px}
+.vol-bar{height:4px;background:var(--border);position:relative;overflow:hidden}
+.vol-bar-fill{height:100%;background:var(--amber);position:absolute;left:0;top:0;transition:width 0.6s ease}
+.vol-threshold{color:var(--amber);font-weight:700}
+.vol-badge{
+  display:inline-block;font-size:9px;padding:2px 8px;
+  border:1px solid var(--border);color:var(--text3);letter-spacing:0.06em;
+}
+.vol-badge.btc{border-color:rgba(255,171,64,0.4);color:var(--amber)}
+
+/* TRAILING STOP INFO */
+.stop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:1.5rem}
+.stop-block{background:var(--bg);padding:1.25rem}
+.stop-block-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.stop-block-value{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--text)}
+.stop-block-value em{color:var(--amber);font-style:normal}
+
+/* CONVERTER */
+.conv-result{
+  margin-top:1rem;padding:1rem;
+  background:var(--bg);border:1px solid var(--border);
+  font-family:var(--mono);font-size:13px;color:var(--text2);
+  min-height:48px;display:flex;align-items:center;gap:8px;
+}
+.conv-result span{color:var(--green);font-size:18px;font-weight:700}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto}
+footer p{font-family:var(--mono);font-size:11px;color:var(--text3)}
+footer a{color:var(--text3);text-decoration:none}
+footer a:hover{color:var(--green)}
+
+@media(max-width:800px){
+  nav{padding:0 1rem}
+  .nav-links{display:none}
+  main{padding:1rem 1rem 3rem}
+  .tools-grid{grid-template-columns:1fr}
+  .input-row,.input-row-3{grid-template-columns:1fr}
+  .stop-grid{grid-template-columns:1fr 1fr}
+  .result-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">crypto<span>2z</span>.com</a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="markets.html">markets</a></li>
+    <li><a href="portfolio.html">portfolio</a></li>
+    <li><a href="tools.html" class="active">tools</a></li>
+    <li><a href="blog.html">blog</a></li>
+    <li><a href="support.html" class="cta">⚡ support</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>node online</div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div>
+      <div class="page-tag">// tools</div>
+      <div class="page-title"><em>Tools</em></div>
+    </div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:right">built from real bot data<br/>updated May 2025</div>
+  </div>
+
+  <!-- TOP ROW: DCA CALC + CONVERTER -->
+  <div class="tools-grid">
+
+    <!-- DCA CALCULATOR -->
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-tag">// calculator</div>
+        <div class="tool-title">DCA Return Calculator</div>
+        <div class="tool-desc">Project returns on a recurring crypto buy strategy. Uses live prices from CoinGecko.</div>
+      </div>
+
+      <label>Coin</label>
+      <select id="dca-coin">
+        <option value="bitcoin">BTC — Bitcoin</option>
+        <option value="ethereum">ETH — Ethereum</option>
+        <option value="cardano">ADA — Cardano</option>
+        <option value="avalanche-2">AVAX — Avalanche</option>
+        <option value="cosmos">ATOM — Cosmos</option>
+        <option value="matic-network">POL — Polygon</option>
+        <option value="stellar">XLM — Stellar</option>
+        <option value="ripple">XRP — XRP</option>
+      </select>
+
+      <div class="input-row" style="margin-top:1rem">
+        <div>
+          <label>Amount per buy ($)</label>
+          <input type="number" id="dca-amount" value="2" min="1" step="1"/>
+        </div>
+        <div>
+          <label>Frequency</label>
+          <select id="dca-freq">
+            <option value="52">Weekly</option>
+            <option value="104">Twice weekly</option>
+            <option value="156" selected>3× per week (M/W/F)</option>
+            <option value="12">Monthly</option>
+            <option value="26">Bi-weekly</option>
+            <option value="365">Daily</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row" style="margin-top:0">
+        <div>
+          <label>Duration (years)</label>
+          <input type="number" id="dca-years" value="3" min="1" max="20" step="1"/>
+        </div>
+        <div>
+          <label>Assumed annual growth</label>
+          <select id="dca-growth">
+            <option value="0">0% (flat)</option>
+            <option value="0.20">20% (conservative)</option>
+            <option value="0.50" selected>50% (moderate)</option>
+            <option value="1.00">100% (bullish)</option>
+            <option value="2.00">200% (very bullish)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="calcDCA()">calculate →</button>
+
+      <div class="result-block" id="dca-result">
+        <div class="result-grid">
+          <div>
+            <div class="result-item-label">total invested</div>
+            <div class="result-item-value" id="res-invested">—</div>
+          </div>
+          <div>
+            <div class="result-item-label">projected value</div>
+            <div class="result-item-value green" id="res-value">—</div>
+          </div>
+          <div>
+            <div class="result-item-label">estimated gain</div>
+            <div class="result-item-value amber" id="res-gain">—</div>
+          </div>
+          <div>
+            <div class="result-item-label">total buys</div>
+            <div class="result-item-value" id="res-buys">—</div>
+          </div>
+        </div>
+        <div class="result-note" id="res-note"></div>
+      </div>
+    </div>
+
+    <!-- SATS CONVERTER -->
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-tag">// converter</div>
+        <div class="tool-title">Sats ↔ USD Converter</div>
+        <div class="tool-desc">Convert between satoshis, BTC, and USD using live Bitcoin price.</div>
+      </div>
+
+      <label>Enter amount</label>
+      <input type="number" id="conv-amount" value="100000" min="0" oninput="convert()"/>
+
+      <label>From</label>
+      <select id="conv-from" onchange="convert()">
+        <option value="sats">Satoshis (sats)</option>
+        <option value="btc">Bitcoin (BTC)</option>
+        <option value="usd">US Dollars (USD)</option>
+      </select>
+
+      <div class="conv-result" id="conv-btc">
+        <span id="conv-btc-val">—</span> BTC
+      </div>
+      <div class="conv-result" id="conv-sats">
+        <span id="conv-sats-val">—</span> sats
+      </div>
+      <div class="conv-result" id="conv-usd">
+        <span id="conv-usd-val">—</span> USD
+      </div>
+
+      <div style="margin-top:1rem;font-family:var(--mono);font-size:10px;color:var(--text3)">
+        BTC live price: <span id="conv-btc-price" style="color:var(--text2)">fetching...</span>
+      </div>
+
+      <!-- QUICK CONVERSIONS -->
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;margin-bottom:0.75rem">quick reference</div>
+        <div id="quick-ref" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+    </div>
+
+  </div><!-- /tools-grid -->
+
+  <!-- FULL WIDTH: VOLATILITY THRESHOLDS -->
+  <div class="tools-grid-full">
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-tag">// from rules.py</div>
+        <div class="tool-title">Volatility Dip Thresholds</div>
+        <div class="tool-desc">Per-coin dip-buy thresholds derived from 180 days of OHLCV history. When a coin drops this % in 24h, the DCA bot triggers an extra buy. BTC is excluded from trailing stops as a cornerstone holding.</div>
+      </div>
+
+      <table class="vol-table">
+        <thead>
+          <tr>
+            <th>coin</th>
+            <th>name</th>
+            <th>dip threshold</th>
+            <th>relative volatility</th>
+            <th>trailing stop</th>
+            <th>notes</th>
+          </tr>
+        </thead>
+        <tbody id="vol-tbody"></tbody>
+      </table>
+
+      <div class="stop-grid">
+        <div class="stop-block">
+          <div class="stop-block-label">trailing stop trigger</div>
+          <div class="stop-block-value"><em>−30%</em> from 30d high</div>
+        </div>
+        <div class="stop-block">
+          <div class="stop-block-label">sell size on trigger</div>
+          <div class="stop-block-value"><em>50%</em> of position</div>
+        </div>
+        <div class="stop-block">
+          <div class="stop-block-label">check frequency</div>
+          <div class="stop-block-value">Daily <em>10 AM</em></div>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.7">
+        * Thresholds analyzed from 180 days of historical data as of early 2025 · BTC excluded from trailing stops as cornerstone holding · not financial advice
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL WIDTH: DCA SCHEDULE VIEWER -->
+  <div class="tools-grid-full" style="margin-top:1px">
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-tag">// schedule</div>
+        <div class="tool-title">My DCA Bot Schedule</div>
+        <div class="tool-desc">Live view of the actual bot parameters running on DigitalOcean.</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)">
+        <div style="background:var(--bg);padding:1.25rem">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px">buy days</div>
+          <div style="font-family:var(--mono);font-size:15px;font-weight:700;color:var(--green)">Mon · Wed · Fri</div>
+        </div>
+        <div style="background:var(--bg);padding:1.25rem">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px">amount / coin</div>
+          <div style="font-family:var(--mono);font-size:15px;font-weight:700;color:var(--green)">$2.00 USDC</div>
+        </div>
+        <div style="background:var(--bg);padding:1.25rem">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px">order type</div>
+          <div style="font-family:var(--mono);font-size:15px;font-weight:700;color:var(--text)">Market</div>
+        </div>
+        <div style="background:var(--bg);padding:1.25rem">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:6px">weekly spend</div>
+          <div style="font-family:var(--mono);font-size:15px;font-weight:700;color:var(--amber)">$48 / wk</div>
+        </div>
+      </div>
+
+      <div style="margin-top:1px;display:flex;flex-wrap:wrap;gap:1px;background:var(--border)">
+        <div id="coin-chips" style="display:contents"></div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>crypto2z.com · <a href="support.html">⚡ support the node</a></p>
+  <p>not financial advice · data: <a href="https://coingecko.com" target="_blank" rel="noopener">coingecko</a></p>
+</footer>
+
+<script>
+// ── VOLATILITY DATA from rules.py ──
+const VOL_DATA = [
+  {sym:'BTC', name:'Bitcoin',   threshold:7.5,  btcCornerstone:true},
+  {sym:'ETH', name:'Ethereum',  threshold:10.6, btcCornerstone:false},
+  {sym:'ADA', name:'Cardano',   threshold:11.6, btcCornerstone:false},
+  {sym:'AVAX',name:'Avalanche', threshold:13.5, btcCornerstone:false},
+  {sym:'ATOM',name:'Cosmos',    threshold:10.1, btcCornerstone:false},
+  {sym:'POL', name:'Polygon',   threshold:12.8, btcCornerstone:false},
+  {sym:'XLM', name:'Stellar',   threshold:10.1, btcCornerstone:false},
+  {sym:'XRP', name:'XRP',       threshold:9.5,  btcCornerstone:false},
+];
+const MAX_THRESH = Math.max(...VOL_DATA.map(v=>v.threshold));
+
+const COINS_META = [
+  {id:'bitcoin',       sym:'BTC'},
+  {id:'ethereum',      sym:'ETH'},
+  {id:'cardano',       sym:'ADA'},
+  {id:'avalanche-2',   sym:'AVAX'},
+  {id:'cosmos',        sym:'ATOM'},
+  {id:'matic-network', sym:'POL'},
+  {id:'stellar',       sym:'XLM'},
+  {id:'ripple',        sym:'XRP'},
+];
+
+let livePrices = {};
+let btcPrice = 0;
+
+// ── BUILD VOLATILITY TABLE ──
+function buildVolTable(){
+  const tbody = document.getElementById('vol-tbody');
+  tbody.innerHTML = VOL_DATA.map(v=>{
+    const pct = (v.threshold/MAX_THRESH)*100;
+    const stopBadge = v.btcCornerstone
+      ? '<span class="vol-badge btc">excluded (cornerstone)</span>'
+      : '<span class="vol-badge">−30% / 50% sell</span>';
+    const note = v.btcCornerstone ? 'cornerstone — never auto-sell' : 'monitored daily @ 10AM';
+    return `<tr>
+      <td class="vol-sym">${v.sym}</td>
+      <td style="color:var(--text3)">${v.name}</td>
+      <td class="vol-threshold">−${v.threshold}%</td>
+      <td class="vol-bar-wrap">
+        <div class="vol-bar"><div class="vol-bar-fill" style="width:${pct}%"></div></div>
+      </td>
+      <td>${stopBadge}</td>
+      <td style="font-size:11px;color:var(--text3)">${note}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── BUILD COIN CHIPS ──
+function buildCoinChips(){
+  const container = document.getElementById('coin-chips');
+  container.innerHTML = VOL_DATA.map(v=>`
+    <div style="background:var(--bg2);padding:1rem 1.25rem;min-width:100px;flex:1">
+      <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px">${v.sym}</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px">${v.name}</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--green)" id="chip-price-${v.sym}">—</div>
+    </div>
+  `).join('');
+}
+
+// ── FETCH PRICES ──
+async function fetchPrices(){
+  const ids = COINS_META.map(c=>c.id).join(',');
+  const r = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=10&page=1&sparkline=false`);
+  const data = await r.json();
+  data.forEach(d=>{
+    const meta = COINS_META.find(c=>c.id===d.id);
+    if(meta) livePrices[meta.sym] = d.current_price;
+  });
+  btcPrice = livePrices['BTC']||0;
+
+  // update chip prices
+  COINS_META.forEach(c=>{
+    const el = document.getElementById('chip-price-'+c.sym);
+    if(el && livePrices[c.sym]){
+      const p = livePrices[c.sym];
+      el.textContent = p>=1000?'$'+p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):(p>=1?'$'+p.toFixed(4):'$'+p.toFixed(6));
+    }
+  });
+
+  // update BTC price display
+  if(btcPrice) document.getElementById('conv-btc-price').textContent = '$'+btcPrice.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  // build quick reference
+  buildQuickRef();
+  convert();
+}
+
+// ── QUICK REFERENCE ──
+function buildQuickRef(){
+  if(!btcPrice) return;
+  const refs = [
+    {sats:1000,    label:'1,000 sats'},
+    {sats:10000,   label:'10,000 sats'},
+    {sats:100000,  label:'100,000 sats'},
+    {sats:1000000, label:'1,000,000 sats (0.01 BTC)'},
+  ];
+  document.getElementById('quick-ref').innerHTML = refs.map(r=>{
+    const usd = (r.sats/1e8)*btcPrice;
+    return `<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;padding:4px 0;border-bottom:1px solid var(--border)">
+      <span style="color:var(--text2)">${r.label}</span>
+      <span style="color:var(--green)">$${usd.toFixed(2)}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── CONVERTER ──
+function convert(){
+  if(!btcPrice) return;
+  const amt = parseFloat(document.getElementById('conv-amount').value)||0;
+  const from = document.getElementById('conv-from').value;
+  let sats,btc,usd;
+  if(from==='sats'){sats=amt;btc=amt/1e8;usd=btc*btcPrice}
+  else if(from==='btc'){btc=amt;sats=amt*1e8;usd=btc*btcPrice}
+  else{usd=amt;btc=amt/btcPrice;sats=btc*1e8}
+  document.getElementById('conv-btc-val').textContent = btc.toFixed(8);
+  document.getElementById('conv-sats-val').textContent = Math.round(sats).toLocaleString();
+  document.getElementById('conv-usd-val').textContent = '$'+usd.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+// ── DCA CALCULATOR ──
+async function calcDCA(){
+  const coinId = document.getElementById('dca-coin').value;
+  const amtPerBuy = parseFloat(document.getElementById('dca-amount').value)||2;
+  const buysPerYear = parseFloat(document.getElementById('dca-freq').value)||156;
+  const years = parseInt(document.getElementById('dca-years').value)||3;
+  const growth = parseFloat(document.getElementById('dca-growth').value)||0.5;
+
+  const totalBuys = Math.round(buysPerYear * years);
+  const totalInvested = amtPerBuy * totalBuys;
+
+  // simple compound growth model on avg cost basis
+  // each buy compounds for remaining time
+  let projectedValue = 0;
+  for(let i=0;i<totalBuys;i++){
+    const yearsRemaining = years - (i/buysPerYear);
+    projectedValue += amtPerBuy * Math.pow(1+growth, yearsRemaining);
+  }
+  const gain = projectedValue - totalInvested;
+  const gainPct = (gain/totalInvested)*100;
+
+  const fmt = n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  document.getElementById('res-invested').textContent = fmt(totalInvested);
+  document.getElementById('res-value').textContent = fmt(projectedValue);
+  document.getElementById('res-gain').textContent = fmt(gain)+' ('+gainPct.toFixed(0)+'%)';
+  document.getElementById('res-buys').textContent = totalBuys.toLocaleString();
+
+  const coinName = document.getElementById('dca-coin').options[document.getElementById('dca-coin').selectedIndex].text;
+  document.getElementById('res-note').textContent =
+    `Assumes ${(growth*100).toFixed(0)}% annual growth compounded per buy. `+
+    `${totalBuys} buys of $${amtPerBuy} into ${coinName} over ${years} year${years>1?'s':''}. `+
+    `This is illustrative only — crypto returns are volatile and not guaranteed.`;
+
+  document.getElementById('dca-result').classList.add('show');
+}
+
+// ── INIT ──
+buildVolTable();
+buildCoinChips();
+fetchPrices();
+setInterval(fetchPrices,60000);
+</script>
+</body>
+</html>

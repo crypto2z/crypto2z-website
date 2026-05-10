@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blog — crypto2z.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c10;--bg2:#0d1117;--bg3:#131920;
+  --border:#1e2d3d;--border2:#2a3f52;
+  --green:#00e676;--red:#ff5252;--amber:#ffab40;--blue:#40c4ff;
+  --text:#e8f0fe;--text2:#8899aa;--text3:#4a6070;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:999}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:var(--mono);font-size:16px;color:var(--green);text-decoration:none;letter-spacing:-0.5px}
+.nav-logo span{color:var(--text2)}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{display:block;padding:0 1rem;height:56px;line-height:56px;color:var(--text2);text-decoration:none;font-size:13px;font-family:var(--mono);letter-spacing:0.02em;transition:color 0.15s;border-bottom:2px solid transparent}
+.nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--green)}
+.nav-links a.active{color:var(--green)}
+.nav-links a.cta{color:var(--amber)}
+.nav-links a.cta:hover{border-bottom-color:var(--amber)}
+.nav-status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text3)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+main{max-width:1280px;margin:0 auto;padding:2rem 2rem 5rem}
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.page-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.page-title{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--text);letter-spacing:-1px}
+.page-title em{color:var(--green);font-style:normal}
+
+/* FILTER TAGS */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2rem}
+.filter-btn{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.08em;
+  padding:5px 14px;border:1px solid var(--border);
+  color:var(--text3);background:transparent;cursor:pointer;transition:all 0.15s;
+}
+.filter-btn:hover{border-color:var(--border2);color:var(--text2)}
+.filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,230,118,0.05)}
+
+/* BLOG LAYOUT */
+.blog-layout{display:grid;grid-template-columns:1fr 280px;gap:1px;background:var(--border);border:1px solid var(--border)}
+.blog-main{background:var(--bg2)}
+.blog-sidebar{background:var(--bg2)}
+
+/* FEATURED POST */
+.featured-post{
+  padding:2rem;border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:1fr;gap:0;
+}
+.post-featured-label{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--green);text-transform:uppercase;margin-bottom:0.75rem}
+.post-meta{display:flex;align-items:center;gap:12px;margin-bottom:0.75rem}
+.post-date{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.08em}
+.post-category{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;padding:2px 8px;border:1px solid var(--border);color:var(--text3)}
+.post-category.node-setup{border-color:rgba(64,196,255,0.4);color:var(--blue)}
+.post-category.dca-bot{border-color:rgba(0,230,118,0.4);color:var(--green)}
+.post-category.presearch{border-color:rgba(179,136,255,0.4);color:var(--purple)}
+.post-category.market{border-color:rgba(255,171,64,0.4);color:var(--amber)}
+.post-title-big{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:0.75rem;letter-spacing:-0.5px}
+.post-excerpt-long{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:1rem}
+.read-more{font-family:var(--mono);font-size:11px;color:var(--green);text-decoration:none;letter-spacing:0.05em}
+.read-more:hover{text-decoration:underline}
+
+/* POST LIST */
+.post-item{
+  padding:1.25rem 2rem;border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:80px 1fr;gap:1rem;align-items:start;
+  text-decoration:none;transition:background 0.15s;
+}
+.post-item:last-child{border-bottom:none}
+.post-item:hover{background:var(--bg3)}
+.post-item-date{font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.4;padding-top:2px}
+.post-item-right{}
+.post-item-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:4px}
+.post-item-excerpt{font-size:12px;color:var(--text2);line-height:1.5}
+.post-item-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.post-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.06em;padding:2px 6px;border:1px solid var(--border);color:var(--text3)}
+
+/* SIDEBAR */
+.sidebar-block{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)}
+.sidebar-block:last-child{border-bottom:none}
+.sidebar-block-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-bottom:0.75rem}
+.category-list{display:flex;flex-direction:column;gap:0}
+.cat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.cat-row:last-child{border-bottom:none}
+.cat-name{font-family:var(--mono);font-size:11px;color:var(--text2)}
+.cat-count{font-family:var(--mono);font-size:10px;color:var(--text3)}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:6px}
+.cloud-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.06em;padding:4px 10px;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.15s}
+.cloud-tag:hover{border-color:var(--green);color:var(--green)}
+.about-blurb{font-size:13px;color:var(--text2);line-height:1.6}
+.about-blurb a{color:var(--green);text-decoration:none}
+.about-blurb a:hover{text-decoration:underline}
+
+/* RSS LINK */
+.rss-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text3);text-decoration:none;padding:0.75rem 0;border-top:1px solid var(--border);margin-top:0.5rem}
+.rss-row:hover{color:var(--amber)}
+
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto}
+footer p{font-family:var(--mono);font-size:11px;color:var(--text3)}
+footer a{color:var(--text3);text-decoration:none}
+footer a:hover{color:var(--green)}
+
+@media(max-width:800px){
+  nav{padding:0 1rem}.nav-links{display:none}
+  main{padding:1rem 1rem 3rem}
+  .blog-layout{grid-template-columns:1fr}
+  .blog-sidebar{display:none}
+  .post-item{grid-template-columns:60px 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">crypto<span>2z</span>.com</a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="markets.html">markets</a></li>
+    <li><a href="portfolio.html">portfolio</a></li>
+    <li><a href="tools.html">tools</a></li>
+    <li><a href="blog.html" class="active">blog</a></li>
+    <li><a href="support.html" class="cta">⚡ support</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>node online</div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div>
+      <div class="page-tag">// from the trenches</div>
+      <div class="page-title"><em>Blog</em></div>
+    </div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:right">node ops · bot dev<br/>market notes · guides</div>
+  </div>
+
+  <!-- FILTER ROW -->
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterPosts('all',this)">all posts</button>
+    <button class="filter-btn" onclick="filterPosts('node-setup',this)">node setup</button>
+    <button class="filter-btn" onclick="filterPosts('dca-bot',this)">dca bot</button>
+    <button class="filter-btn" onclick="filterPosts('market',this)">market notes</button>
+    <button class="filter-btn" onclick="filterPosts('presearch',this)">presearch</button>
+  </div>
+
+  <div class="blog-layout">
+    <div class="blog-main">
+
+      <!-- FEATURED -->
+      <div class="featured-post">
+        <div class="post-featured-label">// featured post</div>
+        <div class="post-meta">
+          <span class="post-date">MAY 2025</span>
+          <span class="post-category node-setup">node setup</span>
+        </div>
+        <div class="post-title-big">Migrating my Bitcoin node from Pi 4 to Pi 5 with NVMe storage</div>
+        <div class="post-excerpt-long">
+          I finally made the jump from a Raspberry Pi 4 running MyNode on a Crucial X6 USB drive to a Pi 5 with a 2TB NVMe in an Argon ONE V5 case. What followed was three days of JMicron USB controller pain, an rsync blockchain transfer, power management flags in cmdline.txt, and a missing .mynode marker file that had me stumped for an afternoon. Here's the full journey — everything that went wrong and how I fixed it.
+        </div>
+        <a href="#" class="read-more">read full post →</a>
+      </div>
+
+      <!-- POST LIST -->
+      <div id="post-list">
+
+        <a href="#" class="post-item" data-cat="dca-bot">
+          <div class="post-item-date">APR<br/>2025</div>
+          <div class="post-item-right">
+            <div class="post-item-title">Building a volatility-aware DCA bot on Coinbase Advanced Trade API</div>
+            <div class="post-item-excerpt">How I analyzed 180 days of OHLCV data per coin, derived dip thresholds, and wired it into a Python bot with Flask dashboard and systemd services.</div>
+            <div class="post-item-tags">
+              <span class="post-tag">python</span>
+              <span class="post-tag">coinbase</span>
+              <span class="post-tag">systemd</span>
+              <span class="post-tag">flask</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="post-item" data-cat="presearch">
+          <div class="post-item-date">MAR<br/>2025</div>
+          <div class="post-item-right">
+            <div class="post-item-title">Running a Presearch node on a repurposed Raspberry Pi 4</div>
+            <div class="post-item-excerpt">After the Pi 5 migration, the Pi 4 got a new job. Installing Docker 29.4.1, staking PRE via Base/Coinbase Wallet, and keeping it running 24/7.</div>
+            <div class="post-item-tags">
+              <span class="post-tag">presearch</span>
+              <span class="post-tag">docker</span>
+              <span class="post-tag">raspberry pi</span>
+              <span class="post-tag">PRE</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="post-item" data-cat="dca-bot">
+          <div class="post-item-date">MAR<br/>2025</div>
+          <div class="post-item-right">
+            <div class="post-item-title">Adding a trailing stop to the DCA bot — protecting gains on altcoins</div>
+            <div class="post-item-excerpt">BTC is a cornerstone and never auto-sold. But for AVAX, ADA, POL and the rest — a 30% drop from the 30-day high triggers a 50% sell. Here's how I built it.</div>
+            <div class="post-item-tags">
+              <span class="post-tag">python</span>
+              <span class="post-tag">trailing stop</span>
+              <span class="post-tag">risk management</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="post-item" data-cat="node-setup">
+          <div class="post-item-date">FEB<br/>2025</div>
+          <div class="post-item-right">
+            <div class="post-item-title">Fixing NVMe instability on the Raspberry Pi 5 — cmdline.txt power flags</div>
+            <div class="post-item-excerpt">The Pi 5's PCIe power management was causing my NVMe to drop off intermittently under load. The fix: three flags in cmdline.txt that took 20 minutes but saved hours of headaches.</div>
+            <div class="post-item-tags">
+              <span class="post-tag">raspberry pi 5</span>
+              <span class="post-tag">nvme</span>
+              <span class="post-tag">pcie</span>
+              <span class="post-tag">mynode</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="post-item" data-cat="market">
+          <div class="post-item-date">FEB<br/>2025</div>
+          <div class="post-item-right">
+            <div class="post-item-title">Why I DCA into 8 coins instead of just BTC</div>
+            <div class="post-item-excerpt">The case for spreading small automated buys across a basket of major assets rather than going Bitcoin-only — and how I think about BTC as the anchor of the whole strategy.</div>
+            <div class="post-item-tags">
+              <span class="post-tag">strategy</span>
+              <span class="post-tag">dca</span>
+              <span class="post-tag">bitcoin</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="post-item" data-cat="node-setup">
+          <div class="post-item-date">JAN<br/>2025</div>
+          <div class="post-item-right">
+            <div class="post-item-title">Connecting Zeus wallet to a self-hosted LND node over Tor</div>
+            <div class="post-item-excerpt">Getting Zeus on iOS connected to the steve2z Lightning node — LND connect strings, Tor vs clearnet, and why I ended up preferring Zeus over Zap.</div>
+            <div class="post-item-tags">
+              <span class="post-tag">zeus</span>
+              <span class="post-tag">lightning</span>
+              <span class="post-tag">lnd</span>
+              <span class="post-tag">ios</span>
+            </div>
+          </div>
+        </a>
+
+      </div><!-- /post-list -->
+
+    </div><!-- /blog-main -->
+
+    <!-- SIDEBAR -->
+    <div class="blog-sidebar">
+
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">// about this blog</div>
+        <p class="about-blurb">Notes from running a self-hosted Bitcoin and Lightning node, building crypto automation tools, and following the markets. Written by <a href="index.html">steve2z</a> from Corning, NY.</p>
+        <a href="support.html" class="rss-row">⚡ support the node →</a>
+      </div>
+
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">// categories</div>
+        <div class="category-list">
+          <div class="cat-row" onclick="filterPosts('node-setup',null)">
+            <span class="cat-name">node setup</span>
+            <span class="cat-count">3 posts</span>
+          </div>
+          <div class="cat-row" onclick="filterPosts('dca-bot',null)">
+            <span class="cat-name">dca bot</span>
+            <span class="cat-count">2 posts</span>
+          </div>
+          <div class="cat-row" onclick="filterPosts('market',null)">
+            <span class="cat-name">market notes</span>
+            <span class="cat-count">1 post</span>
+          </div>
+          <div class="cat-row" onclick="filterPosts('presearch',null)">
+            <span class="cat-name">presearch</span>
+            <span class="cat-count">1 post</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">// tags</div>
+        <div class="tag-cloud">
+          <span class="cloud-tag">bitcoin</span>
+          <span class="cloud-tag">lightning</span>
+          <span class="cloud-tag">raspberry pi</span>
+          <span class="cloud-tag">python</span>
+          <span class="cloud-tag">mynode</span>
+          <span class="cloud-tag">lnd</span>
+          <span class="cloud-tag">coinbase</span>
+          <span class="cloud-tag">docker</span>
+          <span class="cloud-tag">nvme</span>
+          <span class="cloud-tag">dca</span>
+          <span class="cloud-tag">flask</span>
+          <span class="cloud-tag">systemd</span>
+          <span class="cloud-tag">zeus</span>
+          <span class="cloud-tag">presearch</span>
+        </div>
+      </div>
+
+      <div class="sidebar-block">
+        <div class="sidebar-block-label">// elsewhere</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="https://amboss.space/node/027f5cbfc" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:6px">
+            <span style="color:var(--amber)">⚡</span> amboss.space/steve2z
+          </a>
+          <a href="https://twitter.com/steve2z" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:6px">
+            <span style="color:var(--blue)">𝕏</span> @steve2z
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /blog-sidebar -->
+  </div><!-- /blog-layout -->
+
+</main>
+
+<footer>
+  <p>crypto2z.com · <a href="support.html">⚡ support the node</a></p>
+  <p>not financial advice · built with 🖤 and sats</p>
+</footer>
+
+<script>
+function filterPosts(cat, btn){
+  // update active filter button
+  if(btn){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  const posts = document.querySelectorAll('#post-list .post-item');
+  posts.forEach(p=>{
+    if(cat==='all'||p.dataset.cat===cat){
+      p.style.display='grid';
+    } else {
+      p.style.display='none';
+    }
+  });
+}
+</script>
+</body>
+</html>
