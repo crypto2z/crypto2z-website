@@ -20,7 +20,7 @@
 <meta name="twitter:title"       content="Blog — crypto2z.com | Node ops, DCA bot dev, market notes"/>
 <meta name="twitter:description" content="Guides and notes from running a self-hosted Bitcoin & Lightning node, building a Python DCA bot, and following the crypto markets."/>
 <meta name="twitter:image"       content="https://crypto2z.com/og-image.svg"/>
-<link rel="canonical" href="https://crypto2z.com/blog.html"/>
+<link rel="canonical"            href="https://crypto2z.com/blog.html"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
@@ -29,7 +29,7 @@
 :root{
   --bg:#080c10;--bg2:#0d1117;--bg3:#131920;
   --border:#1e2d3d;--border2:#2a3f52;
-  --green:#00e676;--red:#ff5252;--amber:#ffab40;--blue:#40c4ff;--purple:#b388ff;
+  --green:#00e676;--red:#ff5252;--amber:#ffab40;--blue:#40c4ff;--purple:#b388ff;--eth:#627EEA;
   --text:#e8f0fe;--text2:#8899aa;--text3:#4a6070;
   --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
 }
@@ -49,10 +49,29 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,0.93);backdrop-fil
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
+/* MOBILE NAV */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text2);transition:all 0.25s;transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--green)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--green)}
+.mobile-nav{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:rgba(8,12,16,0.97);backdrop-filter:blur(16px);z-index:99;flex-direction:column;border-top:1px solid var(--border);overflow-y:auto}
+.mobile-nav.open{display:flex}
+.mobile-nav a{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;font-family:var(--mono);font-size:15px;letter-spacing:0.04em;color:var(--text2);text-decoration:none;border-bottom:1px solid var(--border);transition:all 0.15s}
+.mobile-nav a:hover{color:var(--text);background:var(--bg2)}
+.mobile-nav a.active{color:var(--green)}
+.mobile-nav a.cta{color:var(--amber)}
+.mobile-nav a .arrow{color:var(--text3);font-size:12px}
+.mobile-nav-footer{padding:1.5rem 2rem;margin-top:auto;font-family:var(--mono);font-size:11px;color:var(--text3);border-top:1px solid var(--border)}
+.mobile-nav-footer a{color:var(--green);text-decoration:none}
+@media(max-width:860px){
+  .hamburger{display:flex}
+  .nav-links{display:none!important}
+  .nav-status{display:none}
+}
+
 /* LAYOUT */
 main{max-width:1280px;margin:0 auto;padding:2rem 2rem 5rem}
-
-/* PAGE HEADER */
 .page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
 .page-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
 .page-title{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--text);letter-spacing:-1px}
@@ -82,50 +101,43 @@ main{max-width:1280px;margin:0 auto;padding:2rem 2rem 5rem}
 .post-tag.dca-bot{border-color:rgba(0,230,118,0.35);color:var(--green)}
 .post-tag.presearch{border-color:rgba(179,136,255,0.35);color:var(--purple)}
 .post-tag.market{border-color:rgba(255,171,64,0.35);color:var(--amber)}
-
-/* FEATURED marker */
+.post-tag.ethereum{border-color:rgba(98,126,234,0.35);color:var(--eth)}
 .featured-label{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--green);text-transform:uppercase;margin-bottom:6px}
 
-/* LOADING STATE */
+/* LOADING */
 .loading-state{padding:3rem 2rem;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text3)}
 .loading-dots::after{content:'...';animation:dots 1.2s infinite}
 @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
 
-/* ── ARTICLE VIEW ── */
+/* ARTICLE VIEW */
 #article-view{display:none}
-.article-back{
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--mono);font-size:11px;color:var(--text3);
-  text-decoration:none;cursor:pointer;padding:0.75rem 0;
-  margin-bottom:1.5rem;letter-spacing:0.06em;
-  background:none;border:none;
-  transition:color 0.15s;
-}
+.article-back{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text3);text-decoration:none;cursor:pointer;padding:0.75rem 0;margin-bottom:1.5rem;letter-spacing:0.06em;background:none;border:none;transition:color 0.15s}
 .article-back:hover{color:var(--green)}
 .article-header{padding-bottom:1.5rem;margin-bottom:2rem;border-bottom:1px solid var(--border)}
-.article-category{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem}
-.article-title{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--text);letter-spacing:-0.75px;line-height:1.3;margin-bottom:0.75rem}
+.article-title{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--text);letter-spacing:-0.75px;line-height:1.3;margin-bottom:0.75rem}
 .article-meta{display:flex;align-items:center;gap:1rem;font-family:var(--mono);font-size:11px;color:var(--text3)}
-.article-tags{display:flex;gap:6px;flex-wrap:wrap}
+.article-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:0.75rem}
 
-/* MARKDOWN RENDERED CONTENT */
+/* MARKDOWN BODY */
 .article-body{max-width:680px;font-size:15px;line-height:1.8;color:var(--text2)}
 .article-body h2{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.5px;margin:2.5rem 0 1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
 .article-body h3{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);margin:2rem 0 0.75rem}
-.article-body p{margin-bottom:1.25rem;color:var(--text2)}
+.article-body p{margin-bottom:1.25rem}
 .article-body a{color:var(--green);text-decoration:none}
 .article-body a:hover{text-decoration:underline}
 .article-body strong{color:var(--text);font-weight:500}
 .article-body em{color:var(--amber);font-style:italic}
-.article-body ul,.article-body ol{margin:0 0 1.25rem 1.5rem;color:var(--text2)}
+.article-body ul,.article-body ol{margin:0 0 1.25rem 1.5rem}
 .article-body li{margin-bottom:0.4rem;line-height:1.7}
-.article-body blockquote{border-left:3px solid var(--green);padding:0.75rem 1.25rem;margin:1.5rem 0;background:rgba(0,230,118,0.04);color:var(--text2);font-style:italic}
+.article-body blockquote{border-left:3px solid var(--green);padding:0.75rem 1.25rem;margin:1.5rem 0;background:rgba(0,230,118,0.04);font-style:italic}
 .article-body hr{border:none;border-top:1px solid var(--border);margin:2rem 0}
-/* CODE */
 .article-body code{font-family:var(--mono);font-size:12px;background:var(--bg3);border:1px solid var(--border);padding:2px 6px;color:var(--green)}
 .article-body pre{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--green);padding:1.25rem 1.5rem;margin:1.5rem 0;overflow-x:auto;position:relative}
 .article-body pre code{background:none;border:none;padding:0;font-size:12px;color:var(--text2);line-height:1.7}
 .article-body pre::before{content:'// code';position:absolute;top:8px;right:12px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--text3)}
+.article-body table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-family:var(--mono);font-size:12px}
+.article-body th{text-align:left;padding:8px 12px;border-bottom:2px solid var(--border);color:var(--text3);font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
+.article-body td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
 
 /* SIDEBAR */
 .sidebar-block{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border)}
@@ -143,7 +155,7 @@ main{max-width:1280px;margin:0 auto;padding:2rem 2rem 5rem}
 .about-blurb a{color:var(--green);text-decoration:none}
 
 /* ARTICLE FOOTER */
-.article-footer{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.article-footer{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 .share-label{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
 .share-btns{display:flex;gap:8px}
 .share-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.06em;padding:6px 14px;border:1px solid var(--border);color:var(--text3);background:transparent;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.15s}
@@ -155,59 +167,11 @@ footer a{color:var(--text3);text-decoration:none}
 footer a:hover{color:var(--green)}
 
 @media(max-width:860px){
-  nav{padding:0 1rem}.nav-links{display:none}
   main{padding:1rem 1rem 3rem}
   .blog-layout{grid-template-columns:1fr}
   .blog-sidebar{display:none}
   .post-item{grid-template-columns:60px 1fr;padding:1.25rem 1rem}
   .page-header{flex-direction:column;align-items:flex-start;gap:0.5rem}
-}
-
-/* ── MOBILE NAV ── */
-.hamburger{
-  display:none;flex-direction:column;justify-content:center;gap:5px;
-  background:none;border:none;cursor:pointer;padding:6px;
-}
-.hamburger span{
-  display:block;width:22px;height:2px;background:var(--text2);
-  transition:all 0.25s;transform-origin:center;
-}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--green)}
-.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--green)}
-
-.mobile-nav{
-  display:none;
-  position:fixed;top:56px;left:0;right:0;bottom:0;
-  background:rgba(8,12,16,0.97);backdrop-filter:blur(16px);
-  z-index:99;flex-direction:column;
-  border-top:1px solid var(--border);
-  overflow-y:auto;
-}
-.mobile-nav.open{display:flex}
-.mobile-nav a{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:1.25rem 2rem;
-  font-family:var(--mono);font-size:15px;letter-spacing:0.04em;
-  color:var(--text2);text-decoration:none;
-  border-bottom:1px solid var(--border);
-  transition:all 0.15s;
-}
-.mobile-nav a:hover{color:var(--text);background:var(--bg2)}
-.mobile-nav a.active{color:var(--green)}
-.mobile-nav a.cta{color:var(--amber)}
-.mobile-nav a .arrow{color:var(--text3);font-size:12px}
-.mobile-nav-footer{
-  padding:1.5rem 2rem;margin-top:auto;
-  font-family:var(--mono);font-size:11px;color:var(--text3);
-  border-top:1px solid var(--border);
-}
-.mobile-nav-footer a{color:var(--green);text-decoration:none}
-
-@media(max-width:860px){
-  .hamburger{display:flex}
-  .nav-links{display:none!important}
-  .nav-status{display:none}
 }
 </style>
 </head>
@@ -226,60 +190,59 @@ footer a:hover{color:var(--green)}
     <li><a href="index.html">home</a></li>
     <li><a href="markets.html">markets</a></li>
     <li><a href="portfolio.html">portfolio</a></li>
+    <li><a href="ethereum.html">ethereum</a></li>
     <li><a href="tools.html">tools</a></li>
     <li><a href="blog.html" class="active">blog</a></li>
     <li><a href="support.html" class="cta">⚡ support</a></li>
   </ul>
   <div class="nav-status"><div class="status-dot"></div>node online</div>
-
-  <!-- HAMBURGER BUTTON -->
   <button class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMobileNav()">
     <span></span><span></span><span></span>
   </button>
-
-  <!-- MOBILE NAV OVERLAY -->
   <div class="mobile-nav" id="mobile-nav">
     <a href="index.html">home<span class="arrow">→</span></a>
     <a href="markets.html">markets<span class="arrow">→</span></a>
     <a href="portfolio.html">portfolio<span class="arrow">→</span></a>
+    <a href="ethereum.html">ethereum<span class="arrow">→</span></a>
     <a href="tools.html">tools<span class="arrow">→</span></a>
     <a href="blog.html" class="active">blog<span class="arrow">→</span></a>
     <a href="support.html" class="cta">⚡ support<span class="arrow">→</span></a>
-    <div class="mobile-nav-footer">
-      crypto2z.com · <a href="support.html">steve2z@crypto2z.com</a>
-    </div>
+    <div class="mobile-nav-footer">crypto2z.com · <a href="support.html">steve2z@crypto2z.com</a></div>
   </div>
 </nav>
 
 <main>
 
-  <!-- ── LIST VIEW ── -->
+  <!-- LIST VIEW -->
   <div id="list-view">
     <div class="page-header">
       <div>
         <div class="page-tag">// from the trenches</div>
         <div class="page-title"><em>Blog</em></div>
       </div>
-      <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:right">node ops · bot dev<br/>market notes · guides</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:right">
+        node ops · bot dev<br/>
+        <span id="post-count" style="color:var(--green)">loading...</span>
+      </div>
     </div>
 
     <div class="filter-row" id="filter-row">
       <button class="filter-btn active" onclick="filterPosts('all',this)">all posts</button>
       <button class="filter-btn" onclick="filterPosts('node-setup',this)">node setup</button>
+      <button class="filter-btn" onclick="filterPosts('ethereum',this)">ethereum</button>
       <button class="filter-btn" onclick="filterPosts('dca-bot',this)">dca bot</button>
       <button class="filter-btn" onclick="filterPosts('market',this)">market notes</button>
       <button class="filter-btn" onclick="filterPosts('presearch',this)">presearch</button>
-      <button class="filter-btn" onclick="filterPosts('node-setup',this)">ethereum</button>
     </div>
 
     <div class="blog-layout">
       <div class="blog-main" id="post-list">
-        <div class="loading-state"><span class="loading-dots">loading posts</span></div>
+        <div class="loading-state"><span class="loading-dots">fetching posts from github</span></div>
       </div>
       <div class="blog-sidebar">
         <div class="sidebar-block">
           <div class="sidebar-label">// about this blog</div>
-          <p class="about-blurb">Notes from running a self-hosted Bitcoin and Lightning node, building crypto automation tools, and following the markets. Written by <a href="index.html">steve2z</a> from Corning, NY.</p>
+          <p class="about-blurb">Notes from running self-hosted Bitcoin and Ethereum nodes, building crypto automation tools, and following the markets. Written by <a href="index.html">steve2z</a> from Corning, NY.</p>
         </div>
         <div class="sidebar-block">
           <div class="sidebar-label">// categories</div>
@@ -292,22 +255,23 @@ footer a:hover{color:var(--green)}
         <div class="sidebar-block">
           <div class="sidebar-label">// elsewhere</div>
           <div style="display:flex;flex-direction:column;gap:10px">
-            <a href="https://amboss.space/node/027f5cbfc" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:6px"><span style="color:var(--amber)">⚡</span> amboss / steve2z</a>
-            <a href="https://twitter.com/steve2z" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:6px"><span style="color:var(--blue)">𝕏</span> @steve2z</a>
-            <a href="support.html" style="font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;display:flex;align-items:center;gap:6px">⚡ support the node →</a>
+            <a href="https://amboss.space/node/027f5cbfc" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none"><span style="color:var(--amber)">⚡</span> amboss / steve2z</a>
+            <a href="https://app.ssv.network/operators/2258" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none"><span style="color:var(--eth)">Ξ</span> SSV operator #2258</a>
+            <a href="https://twitter.com/steve2z" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none"><span style="color:var(--blue)">𝕏</span> @steve2z</a>
+            <a href="support.html" style="font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none">⚡ support the node →</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ── ARTICLE VIEW ── -->
+  <!-- ARTICLE VIEW -->
   <div id="article-view">
     <button class="article-back" onclick="showList()">← back to blog</button>
     <div class="blog-layout">
       <div class="blog-main" style="padding:2rem">
         <div class="article-header">
-          <div class="article-category" id="art-category"></div>
+          <div id="art-category" style="margin-bottom:0.75rem"></div>
           <div class="article-title" id="art-title"></div>
           <div class="article-meta">
             <span id="art-date"></span>
@@ -339,6 +303,7 @@ footer a:hover{color:var(--green)}
           <div class="sidebar-label">// elsewhere</div>
           <div style="display:flex;flex-direction:column;gap:10px">
             <a href="https://amboss.space/node/027f5cbfc" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none">⚡ amboss / steve2z</a>
+            <a href="https://app.ssv.network/operators/2258" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none">Ξ SSV operator #2258</a>
             <a href="https://twitter.com/steve2z" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none">𝕏 @steve2z</a>
           </div>
         </div>
@@ -349,85 +314,95 @@ footer a:hover{color:var(--green)}
 </main>
 
 <footer>
-  <p>crypto2z.com · <a href="support.html">⚡ support the node</a></p>
+  <p>© 2026 crypto2z.com · <a href="support.html">⚡ support the node</a></p>
   <p>not financial advice · built with 🖤 and sats</p>
 </footer>
 
 <script>
-// ── SIMPLE MARKDOWN PARSER ──
-function parseMarkdown(md) {
-  // Strip front matter
-  md = md.replace(/^---[\s\S]*?---\n?/, '');
+// ── CONFIG ──
+const GITHUB_REPO  = 'crypto2z/crypto2z-website';
+const GITHUB_POSTS = `https://api.github.com/repos/${GITHUB_REPO}/contents/posts`;
+const RAW_BASE     = `https://raw.githubusercontent.com/${GITHUB_REPO}/main/posts/`;
 
+// ── MARKDOWN PARSER ──
+function parseMarkdown(md){
+  md = md.replace(/^---[\s\S]*?---\n?/,'');
   const lines = md.split('\n');
-  let html = '';
-  let inCode = false, codeLang = '', codeBuffer = '';
-  let inList = false, listType = '';
+  let html='',inCode=false,codeBuffer='',inList=false,listType='';
 
-  function closeList() {
-    if (inList) { html += `</${listType}>`; inList = false; listType = ''; }
+  function closeList(){if(inList){html+=`</${listType}>`;inList=false;listType=''}}
+  function inline(t){
+    return t
+      .replace(/`([^`]+)`/g,'<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g,'<em>$1</em>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
   }
 
-  function inlineFormat(text) {
-    return text
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-  }
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    // Code blocks
-    if (line.startsWith('```')) {
-      if (!inCode) {
-        closeList();
-        inCode = true;
-        codeLang = line.slice(3).trim();
-        codeBuffer = '';
-      } else {
-        html += `<pre><code>${codeBuffer.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`;
-        inCode = false; codeLang = ''; codeBuffer = '';
-      }
+  for(let i=0;i<lines.length;i++){
+    const line=lines[i];
+    if(line.startsWith('```')){
+      if(!inCode){closeList();inCode=true;codeBuffer=''}
+      else{html+=`<pre><code>${codeBuffer.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`;inCode=false;codeBuffer=''}
       continue;
     }
-    if (inCode) { codeBuffer += line + '\n'; continue; }
-
-    // Headings
-    if (/^## /.test(line))      { closeList(); html += `<h2>${inlineFormat(line.slice(3))}</h2>`; continue; }
-    if (/^### /.test(line))     { closeList(); html += `<h3>${inlineFormat(line.slice(4))}</h3>`; continue; }
-    if (/^#### /.test(line))    { closeList(); html += `<h4>${inlineFormat(line.slice(5))}</h4>`; continue; }
-
-    // HR
-    if (/^---+$/.test(line.trim())) { closeList(); html += '<hr/>'; continue; }
-
-    // Blockquote
-    if (/^> /.test(line)) { closeList(); html += `<blockquote>${inlineFormat(line.slice(2))}</blockquote>`; continue; }
-
-    // Unordered list
-    if (/^- /.test(line) || /^\* /.test(line)) {
-      if (!inList || listType !== 'ul') { closeList(); html += '<ul>'; inList = true; listType = 'ul'; }
-      html += `<li>${inlineFormat(line.slice(2))}</li>`;
-      continue;
+    if(inCode){codeBuffer+=line+'\n';continue}
+    if(/^## /.test(line)){closeList();html+=`<h2>${inline(line.slice(3))}</h2>`;continue}
+    if(/^### /.test(line)){closeList();html+=`<h3>${inline(line.slice(4))}</h3>`;continue}
+    if(/^#### /.test(line)){closeList();html+=`<h4>${inline(line.slice(5))}</h4>`;continue}
+    if(/^---+$/.test(line.trim())){closeList();html+='<hr/>';continue}
+    if(/^> /.test(line)){closeList();html+=`<blockquote>${inline(line.slice(2))}</blockquote>`;continue}
+    if(/^[-*] /.test(line)){
+      if(!inList||listType!=='ul'){closeList();html+='<ul>';inList=true;listType='ul'}
+      html+=`<li>${inline(line.slice(2))}</li>`;continue;
     }
-
-    // Ordered list
-    if (/^\d+\. /.test(line)) {
-      if (!inList || listType !== 'ol') { closeList(); html += '<ol>'; inList = true; listType = 'ol'; }
-      html += `<li>${inlineFormat(line.replace(/^\d+\. /,''))}</li>`;
-      continue;
+    if(/^\d+\. /.test(line)){
+      if(!inList||listType!=='ol'){closeList();html+='<ol>';inList=true;listType='ol'}
+      html+=`<li>${inline(line.replace(/^\d+\. /,''))}</li>`;continue;
     }
-
-    // Empty line
-    if (line.trim() === '') { closeList(); html += ''; continue; }
-
-    // Paragraph
-    closeList();
-    html += `<p>${inlineFormat(line)}</p>`;
+    if(line.trim()===''){closeList();continue}
+    closeList();html+=`<p>${inline(line)}</p>`;
   }
   closeList();
   return html;
+}
+
+// ── PARSE FRONT MATTER ──
+function parseFrontMatter(md){
+  const match = md.match(/^---\n([\s\S]*?)\n---/);
+  if(!match) return {};
+  const fm = {};
+  match[1].split('\n').forEach(line=>{
+    const [key,...rest] = line.split(':');
+    if(key&&rest.length){
+      const val = rest.join(':').trim().replace(/^['"]|['"]$/g,'');
+      fm[key.trim()] = val;
+    }
+  });
+  // parse tags as array
+  if(fm.tags) fm.tags = fm.tags.split(',').map(t=>t.trim());
+  return fm;
+}
+
+// ── INFER CATEGORY FROM FILENAME / TAGS ──
+function inferCategory(filename, fm){
+  if(fm.category) return fm.category;
+  const f = filename.toLowerCase();
+  if(f.includes('ethereum')||f.includes('nethermind')||f.includes('lighthouse')||f.includes('ryzen')) return 'ethereum';
+  if(f.includes('dca')||f.includes('bot')||f.includes('coinbase')) return 'dca-bot';
+  if(f.includes('presearch')) return 'presearch';
+  if(f.includes('market')||f.includes('price')) return 'market';
+  return 'node-setup';
+}
+
+// ── BUILD EXCERPT ──
+function buildExcerpt(md, fm){
+  if(fm.excerpt) return fm.excerpt;
+  // strip front matter and get first real paragraph
+  const body = md.replace(/^---[\s\S]*?---\n?/,'').trim();
+  const lines = body.split('\n').filter(l=>l.trim()&&!l.startsWith('#'));
+  const first = lines[0]||'';
+  return first.replace(/[*_`\[\]]/g,'').slice(0,180)+(first.length>180?'...':'');
 }
 
 // ── STATE ──
@@ -435,41 +410,92 @@ let allPosts = [];
 let currentFilter = 'all';
 let currentSlug = null;
 
-// ── FETCH posts.json ──
-async function loadPosts() {
-  try {
-    const r = await fetch('posts.json');
-    allPosts = await r.json();
+// ── FETCH ALL POSTS FROM GITHUB API ──
+async function loadPosts(){
+  const container = document.getElementById('post-list');
+  try{
+    // Get file list from GitHub API
+    const r = await fetch(GITHUB_POSTS);
+    if(!r.ok) throw new Error('GitHub API error: '+r.status);
+    const files = await r.json();
+
+    // Filter to .md files only, sort by filename descending (newest first)
+    const mdFiles = files
+      .filter(f=>f.name.endsWith('.md'))
+      .sort((a,b)=>b.name.localeCompare(a.name));
+
+    if(!mdFiles.length){
+      container.innerHTML='<div class="loading-state">no posts found in /posts/ folder</div>';
+      return;
+    }
+
+    // Fetch each post's content to read front matter
+    const posts = await Promise.all(mdFiles.map(async f=>{
+      try{
+        const r2 = await fetch(RAW_BASE+f.name);
+        const md = await r2.text();
+        const fm = parseFrontMatter(md);
+        const slug = f.name.replace('.md','');
+
+        // Parse date from front matter or filename (YYYY-MM-DD-slug format)
+        let date = fm.date || '';
+        if(!date){
+          const dm = f.name.match(/^(\d{4}-\d{2}-\d{2})/);
+          if(dm) date = dm[1];
+        }
+
+        return {
+          slug,
+          filename: f.name,
+          title: fm.title || slug.replace(/-/g,' '),
+          date,
+          category: inferCategory(f.name, fm),
+          tags: fm.tags || [],
+          excerpt: buildExcerpt(md, fm),
+          md, // cache the content
+        };
+      }catch(e){
+        console.warn('Failed to fetch',f.name,e);
+        return null;
+      }
+    }));
+
+    allPosts = posts.filter(Boolean);
+
+    // Update post count
+    document.getElementById('post-count').textContent = allPosts.length+' posts';
+
     renderList(allPosts);
     buildSidebar(allPosts);
-  } catch(e) {
-    document.getElementById('post-list').innerHTML =
-      '<div class="loading-state" style="color:var(--red)">Could not load posts.json — make sure it\'s in the repo root.</div>';
+
+  }catch(e){
+    console.error('Failed to load posts:',e);
+    container.innerHTML=`<div class="loading-state" style="color:var(--red)">
+      Could not load posts from GitHub.<br/>
+      <span style="font-size:10px;margin-top:4px;display:block">${e.message}</span>
+    </div>`;
   }
 }
 
 // ── RENDER POST LIST ──
-function renderList(posts) {
+function renderList(posts){
   const container = document.getElementById('post-list');
-  if (!posts.length) {
-    container.innerHTML = '<div class="loading-state">no posts in this category yet.</div>';
+  if(!posts.length){
+    container.innerHTML='<div class="loading-state">no posts in this category yet.</div>';
     return;
   }
 
-  const CAT_COLORS = {
-    'node-setup':'node-setup','dca-bot':'dca-bot',
-    'presearch':'presearch','market':'market'
-  };
+  const CAT_CLASS = {'node-setup':'node-setup','dca-bot':'dca-bot','presearch':'presearch','market':'market','ethereum':'ethereum'};
 
-  container.innerHTML = posts.map((p, idx) => {
-    const d = new Date(p.date);
+  container.innerHTML = posts.map((p,idx)=>{
+    const d = p.date ? new Date(p.date+'T12:00:00') : new Date();
     const mon = d.toLocaleString('default',{month:'short'}).toUpperCase();
     const yr  = d.getFullYear();
-    const featuredLabel = idx === 0 && currentFilter === 'all'
-      ? '<div class="featured-label">// featured</div>' : '';
-    const tagClass = CAT_COLORS[p.category] || '';
-    const tagHTML = `<span class="post-tag ${tagClass}">${p.category.replace('-',' ')}</span>` +
-      (p.tags||[]).slice(0,3).map(t=>`<span class="post-tag">${t}</span>`).join('');
+    const featuredLabel = idx===0&&currentFilter==='all'
+      ? '<div class="featured-label">// latest</div>' : '';
+    const catClass = CAT_CLASS[p.category]||'';
+    const tagHTML = `<span class="post-tag ${catClass}">${p.category.replace('-',' ')}</span>`
+      +(p.tags||[]).slice(0,3).map(t=>`<span class="post-tag">${t}</span>`).join('');
 
     return `<div class="post-item" onclick="openPost('${p.slug}')">
       <div class="post-date">${mon}<br/>${yr}</div>
@@ -484,161 +510,147 @@ function renderList(posts) {
 }
 
 // ── BUILD SIDEBAR ──
-function buildSidebar(posts) {
-  // Categories with counts
+function buildSidebar(posts){
   const cats = {};
-  posts.forEach(p => { cats[p.category] = (cats[p.category]||0)+1; });
-  document.getElementById('sidebar-cats').innerHTML = Object.entries(cats).map(([cat,count])=>
-    `<div class="cat-row" onclick="filterPosts('${cat}',null)">
+  posts.forEach(p=>{ cats[p.category]=(cats[p.category]||0)+1; });
+  document.getElementById('sidebar-cats').innerHTML = Object.entries(cats)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([cat,count])=>`
+    <div class="cat-row" onclick="filterByCategory('${cat}')">
       <span class="cat-name">${cat.replace('-',' ')}</span>
       <span class="cat-count">${count} post${count>1?'s':''}</span>
-    </div>`
-  ).join('');
+    </div>`).join('');
 
-  // Tags
   const tags = {};
-  posts.forEach(p => (p.tags||[]).forEach(t => tags[t] = (tags[t]||0)+1));
-  document.getElementById('sidebar-tags').innerHTML = Object.keys(tags).map(t=>
-    `<span class="cloud-tag" onclick="filterTag('${t}')">${t}</span>`
-  ).join('');
+  posts.forEach(p=>(p.tags||[]).forEach(t=>tags[t]=(tags[t]||0)+1));
+  document.getElementById('sidebar-tags').innerHTML = Object.keys(tags)
+    .map(t=>`<span class="cloud-tag" onclick="filterByTag('${t}')">${t}</span>`).join('');
 }
 
 // ── FILTER ──
-function filterPosts(cat, btn) {
+function filterPosts(cat, btn){
   currentFilter = cat;
-  if (btn) {
+  if(btn){
     document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
   }
-  const filtered = cat === 'all' ? allPosts : allPosts.filter(p=>p.category===cat);
-  renderList(filtered);
+  renderList(cat==='all' ? allPosts : allPosts.filter(p=>p.category===cat));
 }
 
-function filterTag(tag) {
-  const filtered = allPosts.filter(p=>(p.tags||[]).includes(tag));
-  renderList(filtered);
+function filterByCategory(cat){
+  currentFilter = cat;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  renderList(allPosts.filter(p=>p.category===cat));
+}
+
+function filterByTag(tag){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  renderList(allPosts.filter(p=>(p.tags||[]).includes(tag)));
 }
 
 // ── OPEN POST ──
-async function openPost(slug) {
+async function openPost(slug){
   currentSlug = slug;
   const post = allPosts.find(p=>p.slug===slug);
-  if (!post) return;
+  if(!post) return;
 
-  // Show article view
-  document.getElementById('list-view').style.display = 'none';
-  document.getElementById('article-view').style.display = 'block';
+  document.getElementById('list-view').style.display='none';
+  document.getElementById('article-view').style.display='block';
   window.scrollTo(0,0);
 
-  // Populate header
-  const catColors = {'node-setup':'var(--blue)','dca-bot':'var(--green)','presearch':'var(--purple)','market':'var(--amber)'};
+  // Category color
+  const catColors = {'node-setup':'var(--blue)','dca-bot':'var(--green)','presearch':'var(--purple)','market':'var(--amber)','ethereum':'var(--eth)'};
   document.getElementById('art-category').innerHTML =
     `<span style="color:${catColors[post.category]||'var(--text3)'};font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase">${post.category.replace('-',' ')}</span>`;
   document.getElementById('art-title').textContent = post.title;
-  document.getElementById('art-date').textContent = new Date(post.date).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  const d = post.date ? new Date(post.date+'T12:00:00') : new Date();
+  document.getElementById('art-date').textContent = d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   document.getElementById('art-tags').innerHTML = (post.tags||[]).map(t=>`<span class="post-tag">${t}</span>`).join('');
 
-  // Fetch and render markdown
+  // Render markdown — use cached content or fetch
   const bodyEl = document.getElementById('art-body');
-  bodyEl.innerHTML = '<div class="loading-state"><span class="loading-dots">loading post</span></div>';
+  bodyEl.innerHTML='<div class="loading-state"><span class="loading-dots">loading post</span></div>';
 
-  try {
-    const r = await fetch(`posts/${slug}.md`);
-    if (!r.ok) throw new Error('not found');
-    const md = await r.text();
-    const html = parseMarkdown(md);
-    bodyEl.innerHTML = html;
-
-    // Estimate read time
+  try{
+    const md = post.md || await (await fetch(RAW_BASE+post.filename)).text();
+    bodyEl.innerHTML = parseMarkdown(md);
     const words = md.replace(/[#`*\[\]]/g,'').split(/\s+/).length;
     document.getElementById('art-read-time').textContent = Math.ceil(words/200)+' min read';
-  } catch(e) {
-    bodyEl.innerHTML = `<p style="color:var(--red);font-family:var(--mono);font-size:12px">Could not load posts/${slug}.md — make sure the file exists in your repo.</p>`;
+  }catch(e){
+    bodyEl.innerHTML=`<p style="color:var(--red);font-family:var(--mono);font-size:12px">Could not load post content.</p>`;
   }
 
-  // Twitter share link
+  // Share link
   const shareUrl = `https://crypto2z.com/blog.html#${slug}`;
   document.getElementById('share-twitter').href =
     `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(shareUrl)}&via=steve2z`;
 
   // More posts sidebar
-  const others = allPosts.filter(p=>p.slug!==slug).slice(0,4);
-  document.getElementById('more-posts').innerHTML = others.map(p=>
-    `<div style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openPost('${p.slug}')">
+  document.getElementById('more-posts').innerHTML = allPosts
+    .filter(p=>p.slug!==slug).slice(0,4)
+    .map(p=>`<div style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openPost('${p.slug}')">
       <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:3px">${p.title}</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">${new Date(p.date).toLocaleDateString('en-US',{month:'short',year:'numeric'})}</div>
-    </div>`
-  ).join('');
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">${new Date((p.date||'2025-01-01')+'T12:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'})}</div>
+    </div>`).join('');
 
-  // Update URL hash
-  history.pushState(null, '', `#${slug}`);
+  history.pushState(null,'',`#${slug}`);
 }
 
 // ── BACK TO LIST ──
-function showList() {
-  document.getElementById('article-view').style.display = 'none';
-  document.getElementById('list-view').style.display = 'block';
-  history.pushState(null, '', 'blog.html');
+function showList(){
+  document.getElementById('article-view').style.display='none';
+  document.getElementById('list-view').style.display='block';
+  history.pushState(null,'','blog.html');
   window.scrollTo(0,0);
 }
 
 // ── COPY LINK ──
-function copyLink() {
-  const url = `https://crypto2z.com/blog.html#${currentSlug}`;
-  navigator.clipboard.writeText(url).then(()=>{
+function copyLink(){
+  navigator.clipboard.writeText(`https://crypto2z.com/blog.html#${currentSlug}`).then(()=>{
     const btn = event.target;
     const orig = btn.textContent;
-    btn.textContent = '✓ copied!';
-    btn.style.color = 'var(--green)';
-    btn.style.borderColor = 'var(--green)';
-    setTimeout(()=>{ btn.textContent=orig; btn.style.color=''; btn.style.borderColor=''; },2000);
+    btn.textContent='✓ copied!';
+    btn.style.color='var(--green)';
+    btn.style.borderColor='var(--green)';
+    setTimeout(()=>{btn.textContent=orig;btn.style.color='';btn.style.borderColor='';},2000);
   });
 }
+
+// ── MOBILE NAV ──
+function toggleMobileNav(){
+  const nav=document.getElementById('mobile-nav');
+  const btn=document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+  document.body.style.overflow=nav.classList.contains('open')?'hidden':'';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.getElementById('mobile-nav').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow='';
+  }
+});
+document.querySelectorAll('.mobile-nav a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('mobile-nav').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow='';
+  });
+});
 
 // ── INIT ──
 loadPosts().then(()=>{
-  // Handle direct link to a post via hash
   const hash = window.location.hash.slice(1);
-  if (hash && allPosts.find(p=>p.slug===hash)) openPost(hash);
+  if(hash && allPosts.find(p=>p.slug===hash)) openPost(hash);
 });
 
-// Handle browser back button
-window.addEventListener('popstate', ()=>{
+window.addEventListener('popstate',()=>{
   const hash = window.location.hash.slice(1);
-  if (hash && allPosts.find(p=>p.slug===hash)) {
-    openPost(hash);
-  } else {
-    showList();
-  }
+  if(hash && allPosts.find(p=>p.slug===hash)) openPost(hash);
+  else showList();
 });
 </script>
-
-<script>
-function toggleMobileNav(){
-  const nav = document.getElementById('mobile-nav');
-  const btn = document.getElementById('hamburger');
-  nav.classList.toggle('open');
-  btn.classList.toggle('open');
-  document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
-}
-// Close on escape
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape'){
-    document.getElementById('mobile-nav').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-});
-// Close when clicking a link
-document.querySelectorAll('.mobile-nav a').forEach(a => {
-  a.addEventListener('click', () => {
-    document.getElementById('mobile-nav').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-    document.body.style.overflow = '';
-  });
-});
-</script>
-
 </body>
 </html>
