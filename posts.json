@@ -1,10 +1,30 @@
 [
   {
+    "slug": "2026-05-12-celeron-to-ryzen-ethereum-node",
+    "title": "From Celeron to Ryzen: Upgrading My Ethereum Node Hardware",
+    "date": "2026-05-12",
+    "category": "node-setup",
+    "tags": [
+      "ethereum",
+      "ryzen",
+      "nethermind",
+      "ssv",
+      "hardware",
+      "lighthouse"
+    ],
+    "excerpt": "286ms block processing vs 8,000ms. 65 MGas/s vs 1-2 MGas/s. Zero swap vs 2.6GB in use. Real performance numbers from upgrading an Ethereum node from a Celeron G3920 to a Ryzen 5500 with 32GB RAM."
+  },
+  {
     "slug": "pi5-node-migration",
     "title": "Migrating my Bitcoin node from Pi 4 to Pi 5 with NVMe storage",
     "date": "2025-05-01",
     "category": "node-setup",
-    "tags": ["raspberry pi", "mynode", "nvme", "bitcoin"],
+    "tags": [
+      "raspberry pi",
+      "mynode",
+      "nvme",
+      "bitcoin"
+    ],
     "excerpt": "The full journey: USB 2.0 bottlenecks, JMicron controller pain, rsync blockchain transfer, and getting MyNode to recognize the new drive."
   },
   {
@@ -12,7 +32,12 @@
     "title": "Building a volatility-aware DCA bot on Coinbase Advanced Trade",
     "date": "2025-04-10",
     "category": "dca-bot",
-    "tags": ["python", "coinbase", "flask", "systemd"],
+    "tags": [
+      "python",
+      "coinbase",
+      "flask",
+      "systemd"
+    ],
     "excerpt": "How I analyzed 180 days of OHLCV data to derive per-coin dip thresholds, then wired it into a Python bot with a Flask dashboard and systemd services."
   },
   {
@@ -20,7 +45,12 @@
     "title": "Running a Presearch node on a repurposed Raspberry Pi 4",
     "date": "2025-03-15",
     "category": "presearch",
-    "tags": ["presearch", "docker", "raspberry pi", "PRE"],
+    "tags": [
+      "presearch",
+      "docker",
+      "raspberry pi",
+      "PRE"
+    ],
     "excerpt": "After the Pi 5 migration, the old Pi 4 got a new job. Installing Docker, staking PRE via Base/Coinbase Wallet, and keeping it running 24/7."
   }
 ]
