@@ -1,0 +1,13 @@
+# crypto2z.com Jekyll Configuration
+
+title: crypto2z
+description: Home lab node operator - Bitcoin, Ethereum, Lightning
+url: "https://crypto2z.com"
+
+# Include dot-folders for Lightning address support
+include:
+  - .well-known
+
+# Build settings
+markdown: kramdown
+theme: minima
