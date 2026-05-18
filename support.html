@@ -271,14 +271,14 @@ footer a:hover{color:var(--green)}
     <div class="two-col">
       <div class="qr-box"><div id="qr-btc"></div><div class="qr-lbl">scan to pay</div></div>
       <div>
-        <div class="addr-lbl">bitcoin address (P2SH)</div>
-        <div class="addr-box" onclick="copyAddr(this,'3MtQi7XdNHLxopkRqgrbCMKJH4Egcgxugp')">
-          <span class="addr-text">3MtQi7XdNHLxopkRqgrbCMKJH4Egcgxugp</span>
+        <div class="addr-lbl">bitcoin address (native segwit)</div>
+        <div class="addr-box" onclick="copyAddr(this,'bc1ql46dtgahjw2k5nuvp8jhy94f2ktgq947r3y4mp')">
+          <span class="addr-text">bc1ql46dtgahjw2k5nuvp8jhy94f2ktgq947r3y4mp</span>
           <button class="copy-btn">copy</button>
           <span class="copied-msg">copied!</span>
         </div>
         <div class="info-box">₿ On-chain → any amount · standard miner fee<br/>⚡ Lightning → preferred for small amounts · instant · &lt;1 sat fee</div>
-        <a href="bitcoin:3MtQi7XdNHLxopkRqgrbCMKJH4Egcgxugp" class="open-btn btn-btc">₿ open in bitcoin wallet</a>
+        <a href="bitcoin:bc1ql46dtgahjw2k5nuvp8jhy94f2ktgq947r3y4mp" class="open-btn btn-btc">₿ open in bitcoin wallet</a>
       </div>
     </div>
   </div>
@@ -380,7 +380,7 @@ footer a:hover{color:var(--green)}
 <script>
 const ADDRS = {
   ln:  'steve2z@crypto2z.com',
-  btc: '3MtQi7XdNHLxopkRqgrbCMKJH4Egcgxugp',
+  btc: 'bc1ql46dtgahjw2k5nuvp8jhy94f2ktgq947r3y4mp',
   eth: '0x0cd0F5A653B2a5Eb9e1893A5F434740ff09EbBfb',
   sol: '7yyCjccZUJmfG1NE17wHmFQFiD7nfC7jc5xN7sLaY6qz',
 };
