@@ -688,41 +688,56 @@ footer a:hover{color:var(--green)}
   <p>not financial advice · <a href="index.html">home</a> · <a href="markets.html">markets</a> · <a href="blog.html">blog</a></p>
 </footer>
 
+
+
 <script>
-function toggleMobileNav(){
-  const nav=document.getElementById('mobile-nav');
-  const btn=document.getElementById('hamburger');
-  const isOpen = btn.classList.contains('open');
-  if(isOpen){
-    // closing
-    nav.classList.remove('open');
-    nav.style.display='none';
-    btn.classList.remove('open');
-    document.body.style.overflow='';
-  } else {
-    // opening
-    nav.style.display='flex';
-    // force repaint on iOS before adding class
-    nav.getBoundingClientRect();
-    nav.classList.add('open');
-    btn.classList.add('open');
-    document.body.style.overflow='hidden';
+// ── MOBILE NAV ──
+(function(){
+  function openNav(){
+    var el = document.getElementById('mobile-nav');
+    var btn = document.getElementById('hamburger');
+    if(!el || !btn) return;
+    el.style.cssText = 'display:flex!important;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;flex-direction:column;background:rgba(8,12,16,0.98);overflow-y:auto;';
+    btn.setAttribute('data-open','1');
+    btn.style.cssText = '';
+    document.body.style.overflow = 'hidden';
   }
-}
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape'){
-    document.getElementById('mobile-nav').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
+  function closeNav(){
+    var el = document.getElementById('mobile-nav');
+    var btn = document.getElementById('hamburger');
+    if(!el || !btn) return;
+    el.style.cssText = 'display:none;';
+    btn.removeAttribute('data-open');
     document.body.style.overflow = '';
   }
-});
-document.querySelectorAll('.mobile-nav a').forEach(a => {
-  a.addEventListener('click', () => {
-    document.getElementById('mobile-nav').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-    document.body.style.overflow = '';
+  window.toggleMobileNav = function(){
+    var btn = document.getElementById('hamburger');
+    if(!btn) return;
+    if(btn.getAttribute('data-open')){
+      closeNav();
+    } else {
+      openNav();
+    }
+  };
+  // Close on link tap
+  document.addEventListener('click', function(e){
+    var nav = document.getElementById('mobile-nav');
+    if(!nav) return;
+    if(nav.style.display === 'none' || !nav.style.display) return;
+    // If click is on a link inside the nav
+    if(e.target.closest && e.target.closest('.mobile-nav a')){
+      closeNav();
+    }
+    // If click is on the overlay background (not a link)
+    if(e.target === nav){
+      closeNav();
+    }
   });
-});
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeNav();
+  });
+})();
 </script>
+
 </body>
 </html>
