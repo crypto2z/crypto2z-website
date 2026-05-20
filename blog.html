@@ -38,7 +38,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:1}
 
 /* NAV */
-nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+nav{position:sticky;top:0;z-index:100;overflow:visible;background:rgba(8,12,16,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-links{display:flex;gap:0;list-style:none}
 .nav-links a{display:block;padding:0 1rem;height:56px;line-height:56px;color:var(--text2);text-decoration:none;font-size:13px;font-family:var(--mono);letter-spacing:0.02em;transition:color 0.15s;border-bottom:2px solid transparent}
 .nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--green)}
@@ -50,7 +50,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,0.93);backdrop-fil
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
 /* MOBILE NAV */
-.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:6px;position:relative;z-index:200;-webkit-tap-highlight-color:rgba(0,230,118,0.2);touch-action:manipulation;}
 .hamburger span{display:block;width:22px;height:2px;background:var(--text2);transition:all 0.25s;transform-origin:center}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--green)}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}

@@ -421,11 +421,23 @@ footer a:hover{color:var(--green)}
   .nav-status{display:none}
 }
 </style>
-<!-- Eruda mobile console - REMOVE AFTER DEBUGGING -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/3.0.1/eruda.min.js"></script>
-<script>eruda.init();</script>
 </head>
 <body>
+<!-- DEBUG PANEL - REMOVE AFTER DEBUGGING -->
+<div id="debug-panel" style="position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#000;color:#00e676;font-family:monospace;font-size:12px;padding:8px;max-height:40vh;overflow-y:auto;border-top:2px solid #00e676;">
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+    <strong>DEBUG</strong>
+    <button onclick="document.getElementById('debug-panel').style.display='none'" style="background:none;border:1px solid #00e676;color:#00e676;padding:2px 8px;cursor:pointer">hide</button>
+  </div>
+  <div id="debug-log">waiting for tap...</div>
+</div>
+<script>
+function dbg(msg){
+  var el = document.getElementById('debug-log');
+  if(!el) return;
+  el.innerHTML = '<div style="border-bottom:1px solid #1e2d3d;padding:2px 0">'+new Date().toISOString().slice(11,19)+' '+msg+'</div>' + el.innerHTML;
+}
+</script>
 
 <!-- NAV -->
 <nav>
@@ -805,17 +817,17 @@ init();
 // ── MOBILE NAV ──
 (function(){
   function openNav(){
-    console.log('[NAV] openNav called');
+    dbg('[NAV] openNav called');
     var el = document.getElementById('mobile-nav');
     var btn = document.getElementById('hamburger');
-    console.log('[NAV] el:', !!el, 'btn:', !!btn);
-    if(!el || !btn) { console.log('[NAV] missing elements!'); return; }
+    dbg('[NAV] el:', !!el, 'btn:', !!btn);
+    if(!el || !btn) { dbg('[NAV] missing elements!'); return; }
     el.style.cssText = 'display:flex!important;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;flex-direction:column;background:rgba(8,12,16,0.98);overflow-y:auto;';
-    console.log('[NAV] cssText set, display now:', el.style.display);
-    console.log('[NAV] offsetHeight:', el.offsetHeight);
+    dbg('[NAV] cssText set, display now:', el.style.display);
+    dbg('[NAV] offsetHeight:', el.offsetHeight);
     btn.setAttribute('data-open','1');
     document.body.style.overflow = 'hidden';
-    console.log('[NAV] openNav complete');
+    dbg('[NAV] openNav complete');
   }
   function closeNav(){
     var el = document.getElementById('mobile-nav');
@@ -826,22 +838,22 @@ init();
     document.body.style.overflow = '';
   }
   window.toggleMobileNav = function(){
-    console.log('[NAV] toggleMobileNav called');
+    dbg('[NAV] toggleMobileNav called');
     var btn = document.getElementById('hamburger');
-    console.log('[NAV] btn found:', !!btn);
-    if(!btn) { console.log('[NAV] no btn!'); return; }
+    dbg('[NAV] btn found:', !!btn);
+    if(!btn) { dbg('[NAV] no btn!'); return; }
     var nav = document.getElementById('mobile-nav');
-    console.log('[NAV] nav found:', !!nav);
-    console.log('[NAV] nav current display:', nav ? nav.style.display : 'N/A');
-    console.log('[NAV] data-open:', btn.getAttribute('data-open'));
+    dbg('[NAV] nav found:', !!nav);
+    dbg('[NAV] nav current display:', nav ? nav.style.display : 'N/A');
+    dbg('[NAV] data-open:', btn.getAttribute('data-open'));
     if(btn.getAttribute('data-open')){
-      console.log('[NAV] closing');
+      dbg('[NAV] closing');
       closeNav();
     } else {
-      console.log('[NAV] opening');
+      dbg('[NAV] opening');
       openNav();
     }
-    console.log('[NAV] nav display after:', nav ? nav.style.display : 'N/A');
+    dbg('[NAV] nav display after:', nav ? nav.style.display : 'N/A');
   };
   // Close on link tap
   document.addEventListener('click', function(e){
