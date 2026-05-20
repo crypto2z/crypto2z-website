@@ -421,6 +421,9 @@ footer a:hover{color:var(--green)}
   .nav-status{display:none}
 }
 </style>
+<!-- Eruda mobile console - REMOVE AFTER DEBUGGING -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/3.0.1/eruda.min.js"></script>
+<script>eruda.init();</script>
 </head>
 <body>
 
@@ -802,13 +805,17 @@ init();
 // ── MOBILE NAV ──
 (function(){
   function openNav(){
+    console.log('[NAV] openNav called');
     var el = document.getElementById('mobile-nav');
     var btn = document.getElementById('hamburger');
-    if(!el || !btn) return;
+    console.log('[NAV] el:', !!el, 'btn:', !!btn);
+    if(!el || !btn) { console.log('[NAV] missing elements!'); return; }
     el.style.cssText = 'display:flex!important;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;flex-direction:column;background:rgba(8,12,16,0.98);overflow-y:auto;';
+    console.log('[NAV] cssText set, display now:', el.style.display);
+    console.log('[NAV] offsetHeight:', el.offsetHeight);
     btn.setAttribute('data-open','1');
-    btn.style.cssText = '';
     document.body.style.overflow = 'hidden';
+    console.log('[NAV] openNav complete');
   }
   function closeNav(){
     var el = document.getElementById('mobile-nav');
@@ -819,13 +826,22 @@ init();
     document.body.style.overflow = '';
   }
   window.toggleMobileNav = function(){
+    console.log('[NAV] toggleMobileNav called');
     var btn = document.getElementById('hamburger');
-    if(!btn) return;
+    console.log('[NAV] btn found:', !!btn);
+    if(!btn) { console.log('[NAV] no btn!'); return; }
+    var nav = document.getElementById('mobile-nav');
+    console.log('[NAV] nav found:', !!nav);
+    console.log('[NAV] nav current display:', nav ? nav.style.display : 'N/A');
+    console.log('[NAV] data-open:', btn.getAttribute('data-open'));
     if(btn.getAttribute('data-open')){
+      console.log('[NAV] closing');
       closeNav();
     } else {
+      console.log('[NAV] opening');
       openNav();
     }
+    console.log('[NAV] nav display after:', nav ? nav.style.display : 'N/A');
   };
   // Close on link tap
   document.addEventListener('click', function(e){
