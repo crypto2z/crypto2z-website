@@ -173,14 +173,18 @@ footer a:hover{color:var(--green)}
 .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--green)}
 
 .mobile-nav{
-  display:none;
-  position:fixed;top:56px;left:0;right:0;bottom:0;
-  background:rgba(8,12,16,0.97);backdrop-filter:blur(16px);
+  display:none;position:fixed;top:56px;left:0;right:0;bottom:0;
+  background:rgba(8,12,16,0.97);
+  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
   z-index:99;flex-direction:column;
   border-top:1px solid var(--border);
   overflow-y:auto;
+  -webkit-transform:translateZ(0);
+  transform:translateZ(0);
+  -webkit-overflow-scrolling:touch;
 }
-.mobile-nav.open{display:flex}
+.mobile-nav.open{display:flex!important}
 .mobile-nav a{
   display:flex;align-items:center;justify-content:space-between;
   padding:1.25rem 2rem;
@@ -222,6 +226,7 @@ footer a:hover{color:var(--green)}
     <li><a href="index.html">home</a></li>
     <li><a href="markets.html">markets</a></li>
     <li><a href="portfolio.html" class="active">portfolio</a></li>
+    <li><a href="ethereum.html">ethereum</a></li>
     <li><a href="tools.html">tools</a></li>
     <li><a href="blog.html">blog</a></li>
     <li><a href="support.html" class="cta">⚡ support</a></li>
@@ -238,6 +243,7 @@ footer a:hover{color:var(--green)}
     <a href="index.html">home<span class="arrow">→</span></a>
     <a href="markets.html">markets<span class="arrow">→</span></a>
     <a href="portfolio.html" class="active">portfolio<span class="arrow">→</span></a>
+    <a href="ethereum.html">ethereum<span class="arrow">→</span></a>
     <a href="tools.html">tools<span class="arrow">→</span></a>
     <a href="blog.html">blog<span class="arrow">→</span></a>
     <a href="support.html" class="cta">⚡ support<span class="arrow">→</span></a>
@@ -480,11 +486,24 @@ setInterval(fetchAndRender,60000);
 
 <script>
 function toggleMobileNav(){
-  const nav = document.getElementById('mobile-nav');
-  const btn = document.getElementById('hamburger');
-  nav.classList.toggle('open');
-  btn.classList.toggle('open');
-  document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+  const nav=document.getElementById('mobile-nav');
+  const btn=document.getElementById('hamburger');
+  const isOpen = btn.classList.contains('open');
+  if(isOpen){
+    // closing
+    nav.classList.remove('open');
+    nav.style.display='none';
+    btn.classList.remove('open');
+    document.body.style.overflow='';
+  } else {
+    // opening
+    nav.style.display='flex';
+    // force repaint on iOS before adding class
+    nav.getBoundingClientRect();
+    nav.classList.add('open');
+    btn.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
 }
 // Close on escape
 document.addEventListener('keydown', e => {
