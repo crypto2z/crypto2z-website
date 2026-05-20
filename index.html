@@ -800,71 +800,29 @@ init();
 
 
 
-<!-- DEBUG + MOBILE NAV -->
-<div id="dbg" style="position:fixed;bottom:0;left:0;right:0;z-index:2147483647;background:#000;color:#0f0;font:12px monospace;padding:6px;border-top:2px solid #0f0;max-height:35vh;overflow-y:auto;display:block">
-  <div style="display:flex;justify-content:space-between"><b>DEBUG</b><button id="dbg-hide" style="background:#000;border:1px solid #0f0;color:#0f0;padding:2px 8px">hide</button></div>
-  <div id="dbg-log">ready</div>
-</div>
+
 
 <script>
-// Single unified script for mobile nav + debug
-var DBG = document.getElementById('dbg-log');
-function log(msg) {
-  if (DBG) DBG.innerHTML = '<div>' + msg + '</div>' + DBG.innerHTML;
-}
-
-document.getElementById('dbg-hide').addEventListener('click', function() {
-  document.getElementById('dbg').style.display = 'none';
-});
-
-log('script loaded');
-
-var NAV_OPEN = false;
-
-function toggleMobileNav() {
-  log('toggleMobileNav fired, NAV_OPEN=' + NAV_OPEN);
-  
+var _navOpen = false;
+function toggleMobileNav(){
   var el = document.getElementById('mobile-nav');
-  log('mobile-nav el: ' + (el ? 'FOUND' : 'NOT FOUND'));
-  
-  if (!el) return;
-  
-  if (NAV_OPEN) {
-    el.style.display = 'none';
-    NAV_OPEN = false;
-    document.body.style.overflow = '';
-    log('closed');
-  } else {
-    el.style.display = 'flex';
-    el.style.position = 'fixed';
-    el.style.top = '0';
-    el.style.left = '0';
-    el.style.right = '0';  
-    el.style.bottom = '0';
-    el.style.zIndex = '2147483646';
-    el.style.flexDirection = 'column';
-    el.style.background = '#080c10';
-    el.style.overflowY = 'auto';
-    NAV_OPEN = true;
+  if(!el) return;
+  _navOpen = !_navOpen;
+  if(_navOpen){
+    el.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;bottom:0;z-index:9999;background:#080c10;overflow-y:auto;border-top:1px solid #1e2d3d;';
     document.body.style.overflow = 'hidden';
-    log('opened - h=' + el.offsetHeight + ' z=' + el.style.zIndex + ' display=' + el.style.display);
+  } else {
+    el.style.cssText = 'display:none;';
+    document.body.style.overflow = '';
   }
 }
-
-// Close on escape
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && NAV_OPEN) toggleMobileNav();
+document.addEventListener('click', function(e){
+  if(!_navOpen) return;
+  if(e.target.closest && e.target.closest('.mobile-nav a')) toggleMobileNav();
 });
-
-// Close on nav link tap
-document.addEventListener('click', function(e) {
-  if (!NAV_OPEN) return;
-  var link = e.target.closest ? e.target.closest('.mobile-nav a') : null;
-  if (link) toggleMobileNav();
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape' && _navOpen) toggleMobileNav();
 });
-
-log('handlers attached');
 </script>
-
 </body>
 </html>

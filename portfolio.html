@@ -536,5 +536,28 @@ setInterval(fetchAndRender,60000);
 })();
 </script>
 
+
+<script>
+var _navOpen = false;
+function toggleMobileNav(){
+  var el = document.getElementById('mobile-nav');
+  if(!el) return;
+  _navOpen = !_navOpen;
+  if(_navOpen){
+    el.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;bottom:0;z-index:9999;background:#080c10;overflow-y:auto;border-top:1px solid #1e2d3d;';
+    document.body.style.overflow = 'hidden';
+  } else {
+    el.style.cssText = 'display:none;';
+    document.body.style.overflow = '';
+  }
+}
+document.addEventListener('click', function(e){
+  if(!_navOpen) return;
+  if(e.target.closest && e.target.closest('.mobile-nav a')) toggleMobileNav();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape' && _navOpen) toggleMobileNav();
+});
+</script>
 </body>
 </html>
