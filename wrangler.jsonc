@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "crypto2z-website",
+  "compatibility_date": "2026-05-30",
+  "assets": {
+    "directory": "."
+  }
+}
