@@ -3,6 +3,14 @@
   "name": "crypto2z-website",
   "compatibility_date": "2026-05-30",
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "headers": {
+      "/.well-known/nostr.json": {
+        "Access-Control-Allow-Origin": "*"
+      },
+      "/.well-known/lnurlp": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
   }
 }
