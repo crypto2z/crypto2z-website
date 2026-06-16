@@ -29,6 +29,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script type="module" src="https://esm.sh/@getalby/lightning-messageboard@latest"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -116,6 +117,13 @@ main{max-width:960px;margin:0 auto;padding:2rem 2rem 5rem}
 .fund-title{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px}
 .fund-desc{font-size:12px;color:var(--text3);line-height:1.5}
 
+.msg-section{margin-top:2rem;border:1px solid var(--border)}
+.msg-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.msg-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--green);letter-spacing:-0.3px}
+.msg-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px}
+.msg-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);color:var(--green);padding:4px 10px;white-space:nowrap}
+.msg-body{background:var(--bg);padding:1.5rem}
+lightning-messageboard{--lmb-background:var(--bg);--lmb-color:var(--text);--lmb-border-color:var(--border2);--lmb-input-background:var(--bg2);--lmb-button-background:var(--amber);--lmb-button-color:#000;--lmb-font-family:var(--sans)}
 .node-mini{background:var(--bg2);border:1px solid var(--border);border-top:none;padding:1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .node-alias{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)}
 .node-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px}
@@ -132,7 +140,14 @@ footer a:hover{color:var(--green)}
   main{padding:1rem 1rem 3rem}
   .two-col{grid-template-columns:1fr}
   .funds-grid{grid-template-columns:1fr}
-  .node-mini{flex-direction:column;align-items:flex-start}
+  .msg-section{margin-top:2rem;border:1px solid var(--border)}
+.msg-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.msg-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--green);letter-spacing:-0.3px}
+.msg-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:3px}
+.msg-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);color:var(--green);padding:4px 10px;white-space:nowrap}
+.msg-body{background:var(--bg);padding:1.5rem}
+lightning-messageboard{--lmb-background:var(--bg);--lmb-color:var(--text);--lmb-border-color:var(--border2);--lmb-input-background:var(--bg2);--lmb-button-background:var(--amber);--lmb-button-color:#000;--lmb-font-family:var(--sans)}
+.node-mini{flex-direction:column;align-items:flex-start}
   .method-tab{font-size:10px;padding:0.7rem 0.25rem}
 }
 
@@ -361,6 +376,20 @@ footer a:hover{color:var(--green)}
     <div class="fund-block"><div class="fund-icon">🖥️</div><div class="fund-title">Server costs</div><div class="fund-desc">DigitalOcean droplet running the DCA bot and Flask dashboard 24/7</div></div>
     <div class="fund-block"><div class="fund-icon">⚡</div><div class="fund-title">Node hardware</div><div class="fund-desc">Raspberry Pi 5, NVMe storage, and electricity to keep it all running</div></div>
     <div class="fund-block"><div class="fund-icon">📝</div><div class="fund-title">Time & writing</div><div class="fund-desc">Hours of debugging, documenting, and sharing what I learn publicly</div></div>
+  </div>
+
+  <!-- LIGHTNING MESSAGEBOARD -->
+  <div class="msg-section">
+    <div class="msg-header">
+      <div>
+        <div class="msg-title">⚡ Lightning Messageboard</div>
+        <div class="msg-sub">Pay sats to leave a public message · powered by Lightning</div>
+      </div>
+      <div class="msg-badge">live</div>
+    </div>
+    <div class="msg-body">
+      <lightning-messageboard nwc-url="nostr+walletconnect://2d76ae7adf933be9cefb5b9c9d20801a5d59eca3a0c783fbdec66837d140e95c?relay=wss://relay.getalby.com&relay=wss://relay2.getalby.com&secret=7c239b652fa44fb109e233198a04c6a03cdd59c6abb26089b8dbe2e1ebadba64"></lightning-messageboard>
+    </div>
   </div>
 
   <!-- NODE MINI -->
