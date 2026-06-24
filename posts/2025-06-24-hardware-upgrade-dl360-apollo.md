@@ -83,7 +83,7 @@ Clean cascade. Every component found a home.
 
 The second big move: the **HPE Apollo 4200 Gen10** is now physically racked and powered on. If you haven't seen one of these in person, it's a 2U chassis with 28 Large Form Factor (LFF) bays — an absolute unit of a NAS platform built for serious storage density.
 
-![The crypto2z rack — patch panel and networking top, DL360 Ethereum node mid-rack, HPE Apollo 4200 NAS chassis filling the bottom. Those empty drive bays won't stay empty long.](/images/serverrack.jfif)
+![The crypto2z rack — patch panel and networking top, DL360 Ethereum node mid-rack, HPE Apollo 4200 NAS chassis filling the bottom. Those empty drive bays won't stay empty long.](/images/serverrack.jpg)
 
 **Current state of the Apollo:**
 
